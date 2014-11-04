@@ -6,46 +6,70 @@
 
 var level = require('level');
 
-level('\\Users\\Jon\\Documents\\GitHub\\tennisStore\\info.db', function (err, db) {
+var dbFile = '\\Users\\Jon\\Documents\\GitHub\\tennisStore\\info.db';
 
-  if (err) {
+function getFilesInfoFn(dbFileName, cb){
 
-    db.close();
+  var jsonFilesInfo = {
 
-    throw err;
+    fileEntries: []
+  };
 
-    return console.error(err);
-  }
-
-  db.put('file1', 'tennis video', function (err) {
+  level(dbFileName, function (err, db) {
 
     if (err) {
+
       db.close();
-      throw err;
+
+//      throw err;
+      cb(err);
+
+      return console.error(err);
     }
 
-    var stream = db.createReadStream();
+    db.put('file1', 'tennis video', function (err) {
 
-    stream.on('data', function (entry) {
-
-      console.log(entry.key + ": " + entry.value);
-    });
-
-    stream.on('error', function (err) {
-
-      if (err){
+      if (err) {
         db.close();
 
-        throw err;
+//        throw err;
+        cb(err);
       }
-    });
 
-    stream.on('end', function () {
+      var stream = db.createReadStream();
 
-      db.close();
+      stream.on('data', function (entry) {
+
+        console.log(entry.key + ": " + entry.value);
+
+        jsonFilesInfo.fileEntries.push(entry);
+      });
+
+      stream.on('error', function (err) {
+
+        if (err){
+          db.close();
+
+//          throw err;
+          cb(err);
+        }
+      });
+
+      stream.on('end', function () {
+
+        db.close();
+
+        cb(null, jsonFilesInfo);
+      });
     });
   });
-});
+}
 
+module.exports = {
 
+  testFn: function () {
 
+  },
+  getFilesInfo: getFilesInfoFn,
+  dbFileName: dbFile
+};
