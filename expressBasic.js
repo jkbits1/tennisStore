@@ -64,6 +64,7 @@ app.get('/', function (req, res) {
   });
 
 //  res.send('hi');
+//  res.end();
 });
 
 app.post('/note', function (req, res) {
