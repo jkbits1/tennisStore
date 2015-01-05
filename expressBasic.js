@@ -58,7 +58,11 @@ app.get('/', function (req, res) {
 
   filesInfo.getFilesInfo(filesInfo.dbFileName, function (err, jsonFilesInfo) {
 
-    console.log(jsonFilesInfo);
+    if (err) {
+      return console.error(err);
+    }
+
+//    console.log(jsonFilesInfo);
 
     res.send(jsonFilesInfo);
   });
@@ -70,6 +74,32 @@ app.get('/', function (req, res) {
 app.post('/note', function (req, res) {
 
   req.pipe(process.stderr);
+
+  req.on('data', function (data) {
+
+    filesInfo.putFilesInfo(filesInfo.dbFileName,
+      JSON.parse(data.toString()),
+      function (err, message) {
+
+        if (err) {
+          return console.error(err);
+        }
+
+        console.log(message);
+
+//        res.send(jsonFilesInfo);
+      }
+    );
+  });
+
+  req.on('error', function (err) {
+
+    return console.error(err);
+  });
+
+  req.on('end', function () {
+
+  });
 
 
   console.log("note from client");
