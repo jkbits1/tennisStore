@@ -97,21 +97,37 @@ function getFilesInfoFn2(dbFileName, cb){
 
     function write(fileInfo) {
 
-      jsonFilesInfo.fileEntries.push(fileInfo);
+      var fileInfoAsString = fileInfo.value.toString();
 
-      this.queue(JSON.stringify(fileInfo));
+      if (fileInfoAsString.indexOf("item") !== -1) {
+
+//        console.error("get2 item:", JSON.parse(fileInfoAsString));
+
+        jsonFilesInfo.fileEntries.push(
+          JSON.parse(fileInfoAsString));
+
+//        this.queue(fileInfoAsString);
+      }
+      else {
+
+//        jsonFilesInfo.fileEntries.push(fileInfo);
+//
+//        this.queue(JSON.stringify(fileInfo));
+      }
     }
 
     function end() {
 
-      console.error("db close");
+//      console.error("get2 db close");
       db.close();
       cb(null, jsonFilesInfo);
 
       this.queue(null);
     }
 
-    var stream = db.createReadStream();
+    var stream = db.createReadStream(
+//      {valueEncoding: "json"}
+    );
 
     // NOTE: trying a pipe into a through stream
     //       Is this more elegant, or more in the
@@ -124,14 +140,14 @@ function getFilesInfoFn2(dbFileName, cb){
 //      jsonFilesInfo.fileEntries.push(entry);
 //    });
 //
-//    stream.on('error', function (err) {
-//      if (err){
-//        db.close();
-//
-////          throw err;
-//        cb(err);
-//      }
-//    });
+    stream.on('error', function (err) {
+      if (err){
+        db.close();
+
+//          throw err;
+        cb(err);
+      }
+    });
 //
 //    stream.on('end', function () {
 //
@@ -142,7 +158,7 @@ function getFilesInfoFn2(dbFileName, cb){
   });
 }
 
-function putFilesInfoFn(dbFileName, cb){
+function putFilesInfoFn(dbFileName, filesInfo, cb){
 
   var jsonFilesInfo = {
 
@@ -159,39 +175,55 @@ function putFilesInfoFn(dbFileName, cb){
       return console.error(err);
     }
 
-    db.put('file1', 'tennis video', function (err) {
+    filesInfo.notes.forEach(function (val, idx, arr) {
 
-      if (err) {
-        db.close();
+      console.error(val);
 
-//        throw err;
-        cb(err);
-      }
+//      db.put('file1', 'tennis video', function (err) {
+      db.put(filesInfo.folderName + "!" + val.id.toString(), val,
+        {valueEncoding: 'json'}
+        , function (err) {
 
-      var stream = db.createReadStream();
-
-      stream.on('data', function (entry) {
-
-        console.log(entry.key + ": " + entry.value);
-
-        jsonFilesInfo.fileEntries.push(entry);
-      });
-
-      stream.on('error', function (err) {
-
-        if (err){
+        if (err) {
           db.close();
 
-//          throw err;
+//        throw err;
           cb(err);
         }
-      });
 
-      stream.on('end', function () {
+        var stream = db.createReadStream();
 
-        db.close();
+        stream.on('data', function (entry) {
 
-        cb(null, jsonFilesInfo);
+          console.log(entry.key + ": " + entry.value);
+
+          var entryAsString = entry.value.toString();
+
+          if (entryAsString.indexOf("item") !== -1) {
+
+            console.error(JSON.parse(entry.value));
+          }
+
+          jsonFilesInfo.fileEntries.push(entry);
+        });
+
+        stream.on('error', function (err) {
+
+          if (err){
+            db.close();
+
+//          throw err;
+            cb(err);
+          }
+        });
+
+        stream.on('end', function () {
+
+          db.close();
+
+//          cb(null, jsonFilesInfo);
+          cb(null, "done");
+        });
       });
     });
   });
