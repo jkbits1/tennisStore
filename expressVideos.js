@@ -85,26 +85,6 @@ app.get('/foldersDb', function (req, res) {
   var pathList = [];
 
   getMongoData(res);
-
-  //fs.createReadStream('episodesList2.txt').pipe(split())
-  //fs.createReadStream('episodesList2a.txt').pipe(split())
-  //  .on('data', function (line) {
-  //
-  //    if (line === null || line === undefined || line.length === 0) {
-  //
-  //      return;
-  //    }
-  //
-  //    var path = getPathInfo(line);
-  //
-  //    pathList.push(path);
-  //  })
-  //  .on('end', function() {
-  //
-  //    res.send({
-  //      paths: pathList
-  //    });
-  //  });
 });
 
 //function getFileInfo(fileName, regex) {
