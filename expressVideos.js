@@ -5,11 +5,22 @@
 var express = require('express');
 var fs = require('fs');
 var split = require('split');
+var mongoose = require('mongoose');
 
 var getFolderList = require('./fileParse');
 
-
 var app = express();
+
+var progDetails = (function setUpDb() {
+
+  // currently not using this var
+  //var db =
+    mongoose.connect("mongodb://localhost/proginfo");
+
+  var sch = new mongoose.Schema({progId: 'number', path: 'string', name: 'string'});
+
+  return mongoose.model('progs', sch);
+})();
 
 app.all('*', function (req, res, next) {
 
@@ -58,6 +69,42 @@ app.get('/folders', function (req, res) {
         paths: pathList
       });
     });
+});
+
+function getMongoData(res) {
+
+  progDetails.find({}, function(err, docs) {
+
+    //var i = 0;
+    res.send(docs);
+  });
+}
+
+app.get('/foldersDb', function (req, res) {
+
+  var pathList = [];
+
+  getMongoData(res);
+
+  //fs.createReadStream('episodesList2.txt').pipe(split())
+  //fs.createReadStream('episodesList2a.txt').pipe(split())
+  //  .on('data', function (line) {
+  //
+  //    if (line === null || line === undefined || line.length === 0) {
+  //
+  //      return;
+  //    }
+  //
+  //    var path = getPathInfo(line);
+  //
+  //    pathList.push(path);
+  //  })
+  //  .on('end', function() {
+  //
+  //    res.send({
+  //      paths: pathList
+  //    });
+  //  });
 });
 
 //function getFileInfo(fileName, regex) {
