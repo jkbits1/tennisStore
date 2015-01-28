@@ -17,7 +17,12 @@ var progDetails = (function setUpDb() {
   //var db =
     mongoose.connect("mongodb://localhost/proginfo");
 
-  var sch = new mongoose.Schema({progId: 'number', path: 'string', name: 'string'});
+  var sch = new mongoose.Schema({
+    //progId:
+    id:
+      'number',
+    path: 'string', name: 'string'
+  });
 
   return mongoose.model('progs', sch);
 })();
@@ -77,6 +82,10 @@ function getMongoData(res) {
 
     //var i = 0;
     res.send(docs);
+    //res.send({
+    //
+    //  paths: docs
+    //});
   });
 }
 
