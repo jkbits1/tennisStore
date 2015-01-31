@@ -1,0 +1,23 @@
+{
+  "name": "tennisStore",
+  "version": "0.0.0",
+  "description": "",
+  "main": "expressVideos.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jkbits1/tennisStore.git"
+  },
+  "author": "jkbits1",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jkbits1/tennisStore/issues"
+  },
+  "homepage": "https://github.com/jkbits1/tennisStore",
+  "dependencies": {
+    "express": "~4.11.1",
+    "split": "~0.3.2"
+  }
+}
