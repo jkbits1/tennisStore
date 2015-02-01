@@ -70,7 +70,6 @@ function getMongoData(res) {
 
   progDetails.find({}, function(err, docs) {
 
-    //var i = 0;
     res.send(docs);
     //res.send({
     //
@@ -80,8 +79,6 @@ function getMongoData(res) {
 }
 
 app.get('/foldersDb', function (req, res) {
-
-  //var pathList = [];
 
   getMongoData(res);
 });
@@ -110,8 +107,6 @@ app.get('/', function (req, res) {
   //fs.createReadStream('episodesList2a.txt').pipe(split()).on('data',
 
   function processLine (line) {
-  //fs.createReadStream('./episodesList.txt').pipe(split()).on('data', function (line) {
-
     var path = pathInfo.getPathInfo(line);
 
     lineCount++;
@@ -128,7 +123,6 @@ app.get('/', function (req, res) {
       });
     }
   }
-  //);
 
   pathInfo.queryInfoFile(processLine);
 });
@@ -141,9 +135,7 @@ app.get('/:progId', function (req, res) {
 
   // currently get the first line from the file and use that.
   // Will enable rest api param to select specific line.
-  //fs.createReadStream('episodesList2a.txt').pipe(split()).on('data',
 
-  //fs.createReadStream('./episodesList.txt').pipe(split()).on('data', function (line) {
   function processLine(line) {
 
     var path = pathInfo.getPathInfo(line);
@@ -162,7 +154,6 @@ app.get('/:progId', function (req, res) {
         });
     }
   }
-  //);
 
   pathInfo.queryInfoFile(processLine);
 });
