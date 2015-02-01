@@ -8,6 +8,7 @@ var split = require('split');
 var mongoose = require('mongoose');
 
 var getFolderList = require('./fileParse');
+var pathInfo = require('./pathInfo');
 
 var app = express();
 
@@ -34,46 +35,35 @@ app.all('*', function (req, res, next) {
   next();
 });
 
-function getPathInfo(line){
-
-  var pathDetails = line.split(',');
-
-  //var regexPath = /[a-zA-Z0-9\\\:]*/;
-  //var path = getFileInfo(line, regexPath);
-  //console.log(path);
-
-  var path = {};
-
-  path.path = pathDetails[0];
-  path.name = pathDetails[1];
-  path.id = +(pathDetails[2]);
-
-  return path;
-};
-
 app.get('/folders', function (req, res) {
 
   var pathList = [];
 
-  //fs.createReadStream('episodesList2.txt').pipe(split())
-  fs.createReadStream('episodesList2a.txt').pipe(split())
-    .on('data', function (line) {
+  function processLine(line) {
 
       if (line === null || line === undefined || line.length === 0) {
 
         return;
       }
 
-      var path = getPathInfo(line);
+      var path = pathInfo.getPathInfo(line);
 
       pathList.push(path);
-    })
-    .on('end', function() {
+  }
 
-      res.send({
-        paths: pathList
-      });
+  function end() {
+
+    //if (err) {
+    //
+    //  res.send(err);
+    //}
+
+    res.send({
+      paths: pathList
     });
+  }
+
+  pathInfo.queryInfoFile(processLine, end);
 });
 
 function getMongoData(res) {
@@ -91,7 +81,7 @@ function getMongoData(res) {
 
 app.get('/foldersDb', function (req, res) {
 
-  var pathList = [];
+  //var pathList = [];
 
   getMongoData(res);
 });
@@ -117,10 +107,12 @@ app.get('/', function (req, res) {
 
   // currently get the first line from the file and use that.
   // Will enable rest api param to select specific line.
-  fs.createReadStream('episodesList2a.txt').pipe(split()).on('data', function (line) {
+  //fs.createReadStream('episodesList2a.txt').pipe(split()).on('data',
+
+  function processLine (line) {
   //fs.createReadStream('./episodesList.txt').pipe(split()).on('data', function (line) {
 
-    var path = getPathInfo(line);
+    var path = pathInfo.getPathInfo(line);
 
     lineCount++;
 
@@ -135,7 +127,10 @@ app.get('/', function (req, res) {
         });
       });
     }
-  });
+  }
+  //);
+
+  pathInfo.queryInfoFile(processLine);
 });
 
 app.get('/:progId', function (req, res) {
@@ -146,10 +141,12 @@ app.get('/:progId', function (req, res) {
 
   // currently get the first line from the file and use that.
   // Will enable rest api param to select specific line.
-  fs.createReadStream('episodesList2a.txt').pipe(split()).on('data', function (line) {
-    //fs.createReadStream('./episodesList.txt').pipe(split()).on('data', function (line) {
+  //fs.createReadStream('episodesList2a.txt').pipe(split()).on('data',
 
-    var path = getPathInfo(line);
+  //fs.createReadStream('./episodesList.txt').pipe(split()).on('data', function (line) {
+  function processLine(line) {
+
+    var path = pathInfo.getPathInfo(line);
 
     lineCount++;
 
@@ -164,7 +161,10 @@ app.get('/:progId', function (req, res) {
           });
         });
     }
-  });
+  }
+  //);
+
+  pathInfo.queryInfoFile(processLine);
 });
 
 var server = app.listen(3030, function() {});
