@@ -5,11 +5,27 @@
 var express = require('express');
 var fs = require('fs');
 var split = require('split');
+var mongoose = require('mongoose');
 
 var getFolderList = require('./fileParse');
 
-
 var app = express();
+
+var progDetails = (function setUpDb() {
+
+  // currently not using this var
+  //var db =
+    mongoose.connect("mongodb://localhost/proginfo");
+
+  var sch = new mongoose.Schema({
+    //progId:
+    id:
+      'number',
+    path: 'string', name: 'string'
+  });
+
+  return mongoose.model('progs', sch);
+})();
 
 app.all('*', function (req, res, next) {
 
@@ -58,6 +74,26 @@ app.get('/folders', function (req, res) {
         paths: pathList
       });
     });
+});
+
+function getMongoData(res) {
+
+  progDetails.find({}, function(err, docs) {
+
+    //var i = 0;
+    res.send(docs);
+    //res.send({
+    //
+    //  paths: docs
+    //});
+  });
+}
+
+app.get('/foldersDb', function (req, res) {
+
+  var pathList = [];
+
+  getMongoData(res);
 });
 
 //function getFileInfo(fileName, regex) {
