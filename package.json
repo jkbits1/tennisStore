@@ -18,6 +18,7 @@
   "homepage": "https://github.com/jkbits1/tennisStore",
   "dependencies": {
     "express": "~4.11.1",
-    "split": "~0.3.2"
+    "split": "~0.3.2",
+    "mongoose": "~3.8.22"
   }
 }
