@@ -32,8 +32,6 @@ var pathInfo = require('./pathInfo');
 
       //progId:
       //id: 1,
-      //path: "G:\\Stuff\\Video\\TV\\UTOP",
-      //name: "Utopia"
 
       id: path.id,
       path: path.path,
@@ -41,44 +39,9 @@ var pathInfo = require('./pathInfo');
     });
 
     prog.save();
-
-    //pathList.push(path);
   }
 
-  //function end() {
-  //
-  //  //if (err) {
-  //  //
-  //  //  res.send(err);
-  //  //}
-  //
-  //  res.send({
-  //    paths: pathList
-  //  });
-  //}
-
-  pathInfo.queryInfoFile(processLine); //, end
-
-
-  //var prog = new ProgModel({
-  //
-  //  //progId:
-  //  //id: 1,
-  //  //path: "G:\\Stuff\\Video\\TV\\UTOP",
-  //  //name: "Utopia"
-  //});
-  //
-  //prog.save();
-  //
-  //prog = new ProgModel({
-  //
-  //  //progId:
-  //  id: 2,
-  //  path: "H:\\Video\\SG3\\TVee\\SGATE AT",
-  //  name: "Stargate Atlantis"
-  //});
-  //
-  //prog.save();
+  pathInfo.queryInfoFile(processLine);
 })();
 
 
