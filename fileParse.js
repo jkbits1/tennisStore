@@ -9,7 +9,7 @@ module.exports = getFolderSortedList;
 
 function getFolderSortedList(folder, callback){
 
-  //fs.readdir("H:\\Video\\SG3\\TVee\\SGATE AT", function (err, files) {
+function (err, files) {
   fs.readdir(folder, function (err, files) {
 
     var videoList = [];
