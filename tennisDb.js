@@ -10,10 +10,7 @@ var through = require('through');
 var dbFile = '\\Users\\Jon\\Documents\\GitHub\\tennisStore\\info.db';
 
 module.exports = {
-
-  testFn: function () {
-
-  },
+  testFn: function() {},
   getFilesInfo: getFilesInfoFn2,
   putFilesInfo: putFilesInfoFn,
   dbFileName: dbFile
@@ -22,19 +19,14 @@ module.exports = {
 function getFilesInfoFn(dbFileName, cb){
 
   var jsonFilesInfo = {
-
     fileEntries: []
   };
 
   level(dbFileName, function (err, db) {
 
     if (err) {
-
       db.close();
-
-//      throw err;
       cb(err);
-
       return console.error(err);
     }
 
@@ -42,34 +34,25 @@ function getFilesInfoFn(dbFileName, cb){
 
       if (err) {
         db.close();
-
-//        throw err;
         cb(err);
       }
 
       var stream = db.createReadStream();
 
       stream.on('data', function (entry) {
-
         console.log(entry.key + ": " + entry.value);
-
         jsonFilesInfo.fileEntries.push(entry);
       });
 
       stream.on('error', function (err) {
-
         if (err){
           db.close();
-
-//          throw err;
           cb(err);
         }
       });
 
       stream.on('end', function () {
-
         db.close();
-
         cb(null, jsonFilesInfo);
       });
     });
@@ -89,39 +72,29 @@ function getFilesInfoFn2(dbFileName, cb){
 
     if (err) {
       db.close();
-
-//      throw err;
       cb(err);
       return console.error(err);
     }
 
     function write(fileInfo) {
-
       var fileInfoAsString = fileInfo.value.toString();
 
       if (fileInfoAsString.indexOf("item") !== -1) {
-
 //        console.error("get2 item:", JSON.parse(fileInfoAsString));
-
         jsonFilesInfo.fileEntries.push(
           JSON.parse(fileInfoAsString));
-
 //        this.queue(fileInfoAsString);
       }
       else {
-
-//        jsonFilesInfo.fileEntries.push(fileInfo);
-//
+//        jsonFilesInfo.fileEntries.push(fileInfo);//
 //        this.queue(JSON.stringify(fileInfo));
       }
     }
 
     function end() {
-
 //      console.error("get2 db close");
       db.close();
       cb(null, jsonFilesInfo);
-
       this.queue(null);
     }
 
@@ -143,8 +116,6 @@ function getFilesInfoFn2(dbFileName, cb){
     stream.on('error', function (err) {
       if (err){
         db.close();
-
-//          throw err;
         cb(err);
       }
     });
@@ -169,14 +140,11 @@ function putFilesInfoFn(dbFileName, filesInfo, cb){
 
     if (err) {
       db.close();
-
-//      throw err;
       cb(err);
       return console.error(err);
     }
 
     filesInfo.notes.forEach(function (val, idx, arr) {
-
       console.error(val);
 
 //      db.put('file1', 'tennis video', function (err) {
@@ -186,21 +154,16 @@ function putFilesInfoFn(dbFileName, filesInfo, cb){
 
         if (err) {
           db.close();
-
-//        throw err;
           cb(err);
         }
 
         var stream = db.createReadStream();
 
         stream.on('data', function (entry) {
-
           console.log(entry.key + ": " + entry.value);
 
           var entryAsString = entry.value.toString();
-
           if (entryAsString.indexOf("item") !== -1) {
-
             console.error(JSON.parse(entry.value));
           }
 
@@ -208,19 +171,14 @@ function putFilesInfoFn(dbFileName, filesInfo, cb){
         });
 
         stream.on('error', function (err) {
-
           if (err){
             db.close();
-
-//          throw err;
             cb(err);
           }
         });
 
         stream.on('end', function () {
-
           db.close();
-
 //          cb(null, jsonFilesInfo);
           cb(null, "done");
         });
@@ -228,4 +186,3 @@ function putFilesInfoFn(dbFileName, filesInfo, cb){
     });
   });
 }
-
