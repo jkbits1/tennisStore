@@ -28,7 +28,6 @@ function (err, files) {
       }
     });
 
-    //files.forEach(function(file) {
     videoList = files.map(function(file) {
 
       var videoItem = {};
@@ -90,9 +89,6 @@ function (err, files) {
       videoItem.fileName = fileName;
       videoItem.date = fileDate;
       videoItem.time = fileTime;
-
-      //converted to map behaviour
-      //videoList.push(videoItem);
 
       return videoItem;
     });
