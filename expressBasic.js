@@ -33,15 +33,12 @@ app.all('*', function (req, res, next) {
     console.error('OPTIONS method');
   }
 
-
   res.header("Access-Control-Allow-Origin", "*");
-//  res.header("Access-Control-Allow-Headers", "X-Requested-With");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 
   res.header("Access-Control-Allow-Credentials", true);
 
   if (req.method === 'OPTIONS') {
-
     // cribbed from cors() middleware - see above.
     res.statusCode = 204;
     res.end();
@@ -49,7 +46,6 @@ app.all('*', function (req, res, next) {
     console.error('OPTIONS method');
   }
   else {
-
     next();
   }
 });
@@ -63,7 +59,6 @@ app.get('/', function (req, res) {
     }
 
 //    console.log(jsonFilesInfo);
-
     res.send(jsonFilesInfo);
   });
 
@@ -86,7 +81,6 @@ app.post('/note', function (req, res) {
         }
 
         console.log(message);
-
 //        res.send(jsonFilesInfo);
       }
     );
@@ -97,13 +91,9 @@ app.post('/note', function (req, res) {
     return console.error(err);
   });
 
-  req.on('end', function () {
-
-  });
-
+  req.on('end', function() {});
 
   console.log("note from client");
-
 //  res.header("Access-Control-Allow-Origin", "*");
 //  res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
