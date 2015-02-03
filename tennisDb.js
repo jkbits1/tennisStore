@@ -80,9 +80,9 @@ function getFilesInfoFn2(dbFileName, cb){
       var fileInfoAsString = fileInfo.value.toString();
 
       if (fileInfoAsString.indexOf("item") !== -1) {
+
 //        console.error("get2 item:", JSON.parse(fileInfoAsString));
-        jsonFilesInfo.fileEntries.push(
-          JSON.parse(fileInfoAsString));
+        jsonFilesInfo.fileEntries.push(JSON.parse(fileInfoAsString));
 //        this.queue(fileInfoAsString);
       }
       else {
