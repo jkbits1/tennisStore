@@ -5,11 +5,18 @@
 var mongoose = require('mongoose');
 var pathInfo = require('./pathInfo');
 
-(function seedDbFromFile() {
+module.exports = {
+  createDbSeedsFromFile: createDbSeedsFromFile,
+  mainDbName: "mongodb://localhost/proginfo",
+  testDbName: "mongodb://localhost/proginfoTest"
+};
 
-  // currently not using this var
-  //var db =
-  mongoose.connect("mongodb://localhost/proginfo");
+var modelName = 'prog';
+
+function createDbSeedsFromFile(dbName) {
+
+  var db =
+    mongoose.connect(dbName);
 
   var progItem = new mongoose.Schema({
     //progId:
@@ -17,7 +24,7 @@ var pathInfo = require('./pathInfo');
     path: 'string', name: 'string'
   });
 
-  var ProgModel = mongoose.model('prog', progItem);
+  var ProgModel = mongoose.model(modelName, progItem);
 
   function processLine(line) {
 
@@ -41,14 +48,10 @@ var pathInfo = require('./pathInfo');
     prog.save();
   }
 
-  pathInfo.queryInfoFile(processLine);
-})();
+  function end() {
 
+    db.disconnect();
+  }
 
-
-
-
-
-
-
-
+  pathInfo.queryInfoFile(processLine, end);
+}
