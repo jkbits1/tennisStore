@@ -9,7 +9,6 @@ module.exports = getFolderSortedList;
 
 function getFolderSortedList(folder, callback){
 
-function (err, files) {
   fs.readdir(folder, function (err, files) {
 
     var videoList = [];
