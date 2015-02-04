@@ -6,25 +6,42 @@ var mongoose = require('mongoose');
 var pathInfo = require('./pathInfo');
 
 module.exports = {
+  setUpDb: setUpDb,
   createDbSeedsFromFile: createDbSeedsFromFile,
   mainDbName: "mongodb://localhost/proginfo",
-  testDbName: "mongodb://localhost/proginfoTest"
+  testDbName: "mongodb://localhost/proginfoTest",
+  appPort: 3030
 };
 
+var db = undefined;
 var modelName = 'prog';
 
-function createDbSeedsFromFile(dbName) {
+var seedsCreated = 0;
+var SEEDS_TO_CREATE = 2;
 
-  var db =
-    mongoose.connect(dbName);
+var final_line_read = false;
 
-  var progItem = new mongoose.Schema({
+function setUpDb(dbName) {
+
+  // currently not using this var
+  db = mongoose.connect(dbName);
+
+  return createModel();
+}
+
+function createModel() {
+
+  var sch = new mongoose.Schema({
     //progId:
-    id: 'number',
+    id:
+      'number',
     path: 'string', name: 'string'
   });
 
-  var ProgModel = mongoose.model(modelName, progItem);
+  return mongoose.model(modelName, sch);
+}
+
+function createDbSeedsFromFile(ProgModel, closeDbAfterSeeding, cbCompleted) {
 
   function processLine(line) {
 
@@ -45,12 +62,67 @@ function createDbSeedsFromFile(dbName) {
       name: path.name
     });
 
-    prog.save();
+    var writeResult = prog.save(function(err, item, count) {
+
+      if (err) {
+
+        return console.error(err);
+      }
+
+      console.error("item, count", item, count);
+
+      seedsCreated++;
+
+      if (seedsCreated === SEEDS_TO_CREATE) {
+
+        if (final_line_read === true) {
+
+          closeDown();
+        }
+
+        //if (closeDbAfterSeeding !== undefined && closeDbAfterSeeding === true) {
+        //
+        //  db.disconnect();
+        //}
+        //
+        //if (cbCompleted !== undefined && cbCompleted !== null) {
+        //
+        //  cbCompleted();
+        //}
+      }
+    });
   }
 
   function end() {
 
-    db.disconnect();
+    final_line_read = true;
+
+    if (seedsCreated == SEEDS_TO_CREATE) {
+
+      //process.nextTick(closeDown);
+      //}
+      closeDown();
+    }
+  }
+
+  function closeDown() {
+
+    //if (seedsCreated < SEEDS_TO_CREATE) {
+    //
+    //  process.nextTick(closeDown);
+    //
+    //  return;
+    //}
+
+    if (closeDbAfterSeeding !== undefined && closeDbAfterSeeding === true) {
+
+      db.disconnect();
+    }
+
+    if (cbCompleted !== undefined && cbCompleted !== null) {
+
+      cbCompleted();
+    }
   }
 
   pathInfo.queryInfoFile(processLine, end);
