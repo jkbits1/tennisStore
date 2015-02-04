@@ -9,24 +9,11 @@ var mongoose = require('mongoose');
 
 var getFolderList = require('./fileParse');
 var pathInfo = require('./pathInfo');
+var seedDb = require('./seedDb');
 
 var app = express();
 
-var progDetails = (function setUpDb() {
-
-  // currently not using this var
-  //var db =
-    mongoose.connect("mongodb://localhost/proginfo");
-
-  var sch = new mongoose.Schema({
-    //progId:
-    id:
-      'number',
-    path: 'string', name: 'string'
-  });
-
-  return mongoose.model('progs', sch);
-})();
+var progDetails = seedDb.setUpDb(seedDb.mainDbName);
 
 app.all('*', function (req, res, next) {
 
@@ -102,10 +89,7 @@ app.get('/', function (req, res) {
 
   var lineCount = 0;
 
-  // currently get the first line from the file and use that.
-  // Will enable rest api param to select specific line.
-  //fs.createReadStream('episodesList2a.txt').pipe(split()).on('data',
-
+  // as a default, currently get the first line from the file and use that.
   function processLine (line) {
     var path = pathInfo.getPathInfo(line);
 
@@ -113,9 +97,7 @@ app.get('/', function (req, res) {
 
     if (lineCount === 1){
 
-      getFolderList(
-        path.path
-        , function (err, list) {
+      getFolderList(path.path, function (err, list) {
 
         res.send({
           files: list
@@ -133,9 +115,6 @@ app.get('/:progId', function (req, res) {
 
   var progId = +(req.params.progId);
 
-  // currently get the first line from the file and use that.
-  // Will enable rest api param to select specific line.
-
   function processLine(line) {
 
     var path = pathInfo.getPathInfo(line);
@@ -144,9 +123,7 @@ app.get('/:progId', function (req, res) {
 
     if (path.id === progId){
 
-      getFolderList(
-        path.path
-        , function (err, list) {
+      getFolderList(path.path, function (err, list) {
 
           res.send({
             files: list
@@ -158,4 +135,4 @@ app.get('/:progId', function (req, res) {
   pathInfo.queryInfoFile(processLine);
 });
 
-var server = app.listen(3030, function() {});
+var server = app.listen(seedDb.appPort, function() {});
