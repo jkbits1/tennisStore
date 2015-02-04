@@ -4,7 +4,13 @@
 
 var seedDb = require("./seedDb");
 
-seedDb.createDbSeedsFromFile(seedDb.mainDbName);
+(function () {
+
+  seedDb.createDbSeedsFromFile(seedDb.setUpDb(seedDb.mainDbName), true, function() {
+
+    console.error("db seeded");
+  });
+})();
 
 
 
