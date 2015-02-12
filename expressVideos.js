@@ -6,6 +6,8 @@ var express = require('express');
 var fs = require('fs');
 var split = require('split');
 var mongoose = require('mongoose');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
 
 var getFolderList = require('./fileParse');
 var pathInfo = require('./pathInfo');
@@ -15,6 +17,29 @@ var app = express();
 
 // connect to db
 var progDetails = seedDb.setUpDb(seedDb.mainDbName);
+
+function findUser(username, fn) {
+
+  fn(null, user)
+}
+
+passport.use(new LocalStrategy(
+  function(user, pwd, done) {
+
+    process.nextTick(function(err, user) {
+
+        if (err) {
+          return done(err);
+        }
+
+        return done(null, user);
+      }
+    );
+  }
+));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.all('*', function (req, res, next) {
 
