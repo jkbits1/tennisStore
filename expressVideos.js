@@ -13,12 +13,12 @@ var seedDb = require('./seedDb');
 
 var app = express();
 
+// connect to db
 var progDetails = seedDb.setUpDb(seedDb.mainDbName);
 
 app.all('*', function (req, res, next) {
 
   res.header("Access-Control-Allow-Origin", "*");
-
   next();
 });
 
@@ -29,12 +29,9 @@ app.get('/folders', function (req, res) {
   function processLine(line) {
 
       if (line === null || line === undefined || line.length === 0) {
-
         return;
       }
-
       var path = pathInfo.getPathInfo(line);
-
       pathList.push(path);
   }
 
@@ -70,35 +67,18 @@ app.get('/foldersDb', function (req, res) {
   getMongoData(res);
 });
 
-//function getFileInfo(fileName, regex) {
-//
-//  var items = fileName.match(regex);
-//  var itemInfo = undefined;
-//
-//  items.forEach(function (item) {
-//
-//    //console.log("matches:", item);
-//
-//    itemInfo = item;
-//  });
-//
-//  return itemInfo;
-//}
-
+// as a default, currently get the first line from the file and use that.
 app.get('/', function (req, res) {
 
   var lineCount = 0;
 
-  // as a default, currently get the first line from the file and use that.
   function processLine (line) {
+
     var path = pathInfo.getPathInfo(line);
-
     lineCount++;
-
     if (lineCount === 1){
 
       getFolderList(path.path, function (err, list) {
-
         res.send({
           files: list
         });
@@ -112,23 +92,19 @@ app.get('/', function (req, res) {
 app.get('/:progId', function (req, res) {
 
   var lineCount = 0;
-
   var progId = +(req.params.progId);
 
   function processLine(line) {
 
     var path = pathInfo.getPathInfo(line);
-
     lineCount++;
-
     if (path.id === progId){
 
       getFolderList(path.path, function (err, list) {
-
-          res.send({
-            files: list
-          });
+        res.send({
+          files: list
         });
+      });
     }
   }
 
