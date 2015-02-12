@@ -3,6 +3,8 @@
  */
 
 var express = require('express');
+var bodyParser = require('body-parser');
+
 var fs = require('fs');
 var split = require('split');
 var mongoose = require('mongoose');
@@ -15,6 +17,9 @@ var app = express();
 
 // connect to db
 var progDetails = seedDb.setUpDb(seedDb.mainDbName);
+
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
 
 app.all('*', function (req, res, next) {
 
@@ -111,4 +116,14 @@ app.get('/:progId', function (req, res) {
   pathInfo.queryInfoFile(processLine);
 });
 
+app.post('/proginfo', function (req, res) {
+
+  console.log(req.body);
+});
+
 var server = app.listen(seedDb.appPort, function() {});
+
+// use from postman
+//http://localhost:3030/proginfo
+//Content-Type:     application/json
+//{"id":"1", "info": "123"} (raw)
