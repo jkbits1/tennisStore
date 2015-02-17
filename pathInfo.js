@@ -10,15 +10,12 @@ module.exports = {
   getPathInfo: getPathInfo
 };
 
-function getPathInfo(line){
-
+function getPathInfo (line){
   var pathDetails = line.split(',');
-
+  var path = {};
   //var regexPath = /[a-zA-Z0-9\\\:]*/;
   //var path = getFileInfo(line, regexPath);
   //console.log(path);
-
-  var path = {};
 
   path.path = pathDetails[0];
   path.name = pathDetails[1];
@@ -27,20 +24,16 @@ function getPathInfo(line){
   return path;
 };
 
-function queryInfoFile(cbLine, cbEnd) {
-
+function queryInfoFile (cbLine, cbEnd) {
   var pathList = [];
 
   fs.createReadStream('episodesList2a.txt').pipe(split())
     .on('data', cbLine)
-    .on('end', function(){
-
+    .on('end', function (){
       if (cbEnd !== undefined && cbEnd !== null) {
-
         cbEnd();
       }
     })
-
     //.on('error', function(err) {
     //
     //  cb(err);
