@@ -2,104 +2,109 @@
  * Created by jk on 23/01/15.
  */
 
-var mongoose = require('mongoose');
-var pathInfo = require('./pathInfo');
+(function () {
 
-module.exports = {
-  setUpDb: setUpDb,
-  createDbSeedsFromFile: createDbSeedsFromFile,
-  mainDbName: "mongodb://localhost/proginfo",
-  testDbName: "mongodb://localhost/proginfoTest",
-  appPort: 3030
-};
+  var mongoose = require('mongoose');
+  var pathInfo = require('./pathInfo');
 
-var db = undefined;
-var modelName = 'prog';
-var seedsCreated = 0;
-var SEEDS_TO_CREATE = 2;
-var final_line_read = false;
+  module.exports = {
+    setUpDb: setUpDb,
+    createDbSeedsFromFile: createDbSeedsFromFile,
+    mainDbName: "mongodb://localhost/proginfo",
+    testDbName: "mongodb://localhost/proginfoTest",
+    appPort: 3030
+  };
 
-function setUpDb(dbName) {
+  var db = undefined;
 
-  db = mongoose.connect(dbName);
-  return createModel();
-}
+  function setUpDb(dbName) {
 
-function createModel() {
+    function createModel() {
 
-  var schema = new mongoose.Schema({
-    //progId:
-    id: 'number', path: 'string', name: 'string'
-  });
+      var modelName = 'prog';
 
-  return mongoose.model(modelName, schema);
-}
+      var schema = new mongoose.Schema({
+        //progId:
+        id: 'number', path: 'string', name: 'string'
+      });
 
-function createDbSeedsFromFile(ProgModel, closeDbAfterSeeding, cbCompleted) {
-
-  function processLine(line) {
-
-    if (line === null || line === undefined || line.length === 0) {
-      return;
+      return mongoose.model(modelName, schema);
     }
 
-    var path = pathInfo.getPathInfo(line);
-    var prog = new ProgModel({
+    db = mongoose.connect(dbName);
+    return createModel();
+  }
 
-      //progId:
-      //id: 1,
-      id: path.id,
-      path: path.path,
-      name: path.name
-    });
+  function createDbSeedsFromFile(ProgModel, closeDbAfterSeeding, cbCompleted) {
 
-    var writeResult = prog.save(function(err, item, count) {
+    var final_line_read = false;
+    var seedsCreated = 0;
+    var SEEDS_TO_CREATE = 2;
 
-      if (err) {
-        return console.error(err);
+    function processLine(line) {
+
+      if (line === null || line === undefined || line.length === 0) {
+        return;
       }
 
-      console.error("item, count", item, count);
+      var path = pathInfo.getPathInfo(line);
+      var prog = new ProgModel({
 
-      seedsCreated++;
-      if (seedsCreated === SEEDS_TO_CREATE) {
-        if (final_line_read === true) {
+        //progId:
+        //id: 1,
+        id: path.id,
+        path: path.path,
+        name: path.name
+      });
 
-          closeDown();
+      var writeResult = prog.save(function(err, item, count) {
+
+        if (err) {
+          return console.error(err);
         }
+
+        console.error("item, count", item, count);
+
+        seedsCreated++;
+        if (seedsCreated === SEEDS_TO_CREATE) {
+          if (final_line_read === true) {
+
+            closeDown();
+          }
+        }
+      });
+    }
+
+    function end() {
+      final_line_read = true;
+
+      if (seedsCreated == SEEDS_TO_CREATE) {
+
+        //process.nextTick(closeDown);
+        //}
+        closeDown();
       }
-    });
-  }
+    }
 
-  function end() {
-    final_line_read = true;
+    function closeDown() {
 
-    if (seedsCreated == SEEDS_TO_CREATE) {
-
-      //process.nextTick(closeDown);
+      //if (seedsCreated < SEEDS_TO_CREATE) {
+      //
+      //  process.nextTick(closeDown);
+      //
+      //  return;
       //}
-      closeDown();
+
+      if (closeDbAfterSeeding !== undefined && closeDbAfterSeeding === true) {
+        db.disconnect();
+      }
+
+      if (cbCompleted !== undefined && cbCompleted !== null) {
+
+        cbCompleted();
+      }
     }
+
+    pathInfo.queryInfoFile(processLine, end);
   }
-
-  function closeDown() {
-
-    //if (seedsCreated < SEEDS_TO_CREATE) {
-    //
-    //  process.nextTick(closeDown);
-    //
-    //  return;
-    //}
-
-    if (closeDbAfterSeeding !== undefined && closeDbAfterSeeding === true) {
-      db.disconnect();
-    }
-
-    if (cbCompleted !== undefined && cbCompleted !== null) {
-
-      cbCompleted();
-    }
-  }
-
-  pathInfo.queryInfoFile(processLine, end);
-}
+})();
