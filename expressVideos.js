@@ -38,26 +38,17 @@ passport.use(new LocalStrategy(
   }
 ));
 
-app.use(passport.initialize());
-app.use(passport.session());
-
-app.all('*', function (req, res, next) {
-
-  res.header("Access-Control-Allow-Origin", "*");
-  next();
-});
-
-app.get('/folders', function (req, res) {
+function getFoldersFromFile(req, res) {
 
   var pathList = [];
 
   function processLine(line) {
 
-      if (line === null || line === undefined || line.length === 0) {
-        return;
-      }
-      var path = pathInfo.getPathInfo(line);
-      pathList.push(path);
+    if (line === null || line === undefined || line.length === 0) {
+      return;
+    }
+    var path = pathInfo.getPathInfo(line);
+    pathList.push(path);
   }
 
   function end() {
@@ -73,27 +64,27 @@ app.get('/folders', function (req, res) {
   }
 
   pathInfo.queryInfoFile(processLine, end);
-});
-
-function getMongoData(res) {
-
-  progDetails.find({}, function(err, docs) {
-
-    res.send(docs);
-    //res.send({
-    //
-    //  paths: docs
-    //});
-  });
 }
 
-app.get('/foldersDb', function (req, res) {
+function getFoldersFromDb(req, res) {
+
+  function getMongoData(res) {
+
+    progDetails.find({}, function(err, docs) {
+
+      res.send(docs);
+      //res.send({
+      //
+      //  paths: docs
+      //});
+    });
+  }
 
   getMongoData(res);
-});
+}
 
 // as a default, currently get the first line from the file and use that.
-app.get('/', function (req, res) {
+function getDefaultEpisodesInfo(req, res) {
 
   var lineCount = 0;
 
@@ -112,9 +103,9 @@ app.get('/', function (req, res) {
   }
 
   pathInfo.queryInfoFile(processLine);
-});
+}
 
-app.get('/:progId', function (req, res) {
+function getEpisodesInfo(req, res) {
 
   var lineCount = 0;
   var progId = +(req.params.progId);
@@ -134,6 +125,20 @@ app.get('/:progId', function (req, res) {
   }
 
   pathInfo.queryInfoFile(processLine);
+}
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.all('*', function (req, res, next) {
+
+  res.header("Access-Control-Allow-Origin", "*");
+  next();
 });
+
+app.get('/', getDefaultEpisodesInfo);
+app.get('/folders', getFoldersFromFile);
+app.get('/foldersDb', getFoldersFromDb);
+app.get('/:progId', getEpisodesInfo);
 
 var server = app.listen(seedDb.appPort, function() {});
