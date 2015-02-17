@@ -2,143 +2,149 @@
  * Created by jk on 27/12/14.
  */
 
-var express = require('express');
-var fs = require('fs');
-var split = require('split');
-var mongoose = require('mongoose');
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
+//  using IIFE to clarify functions declared are not used
+//  elsewhere. This may well be an unnecessary addition.
+(function(){
 
-var getFolderList = require('./fileParse');
-var pathInfo = require('./pathInfo');
-var seedDb = require('./seedDb');
+  var express = require('express');
+  var fs = require('fs');
+  var split = require('split');
+  var mongoose = require('mongoose');
+  var passport = require('passport');
+  var LocalStrategy = require('passport-local').Strategy;
 
-var app = express();
+  var getFolderList = require('./fileParse');
+  var pathInfo = require('./pathInfo');
+  var seedDb = require('./seedDb');
 
-// connect to db
-var progDetails = seedDb.setUpDb(seedDb.mainDbName);
+  var app = express();
 
-function findUser(username, fn) {
+  // connect to db
+  var progDetails = seedDb.setUpDb(seedDb.mainDbName);
 
-  fn(null, user)
-}
+  function findUser(username, fn) {
 
-passport.use(new LocalStrategy(
-  function(user, pwd, done) {
+    fn(null, user)
+  }
 
-    process.nextTick(function(err, user) {
+  passport.use(new LocalStrategy(
+    function(user, pwd, done) {
 
-        if (err) {
-          return done(err);
+      process.nextTick(function(err, user) {
+
+          if (err) {
+            return done(err);
+          }
+
+          return done(null, user);
         }
+      );
+    }
+  ));
 
-        return done(null, user);
+  function getFoldersFromFile(req, res) {
+
+    var pathList = [];
+
+    function processLine(line) {
+
+      if (line === null || line === undefined || line.length === 0) {
+        return;
       }
-    );
-  }
-));
-
-function getFoldersFromFile(req, res) {
-
-  var pathList = [];
-
-  function processLine(line) {
-
-    if (line === null || line === undefined || line.length === 0) {
-      return;
+      var path = pathInfo.getPathInfo(line);
+      pathList.push(path);
     }
-    var path = pathInfo.getPathInfo(line);
-    pathList.push(path);
-  }
 
-  function end() {
+    function end() {
 
-    //if (err) {
-    //
-    //  res.send(err);
-    //}
-
-    res.send({
-      paths: pathList
-    });
-  }
-
-  pathInfo.queryInfoFile(processLine, end);
-}
-
-function getFoldersFromDb(req, res) {
-
-  function getMongoData(res) {
-
-    progDetails.find({}, function(err, docs) {
-
-      res.send(docs);
-      //res.send({
+      //if (err) {
       //
-      //  paths: docs
-      //});
-    });
-  }
+      //  res.send(err);
+      //}
 
-  getMongoData(res);
-}
-
-// as a default, currently get the first line from the file and use that.
-function getDefaultEpisodesInfo(req, res) {
-
-  var lineCount = 0;
-
-  function processLine (line) {
-
-    var path = pathInfo.getPathInfo(line);
-    lineCount++;
-    if (lineCount === 1){
-
-      getFolderList(path.path, function (err, list) {
-        res.send({
-          files: list
-        });
+      res.send({
+        paths: pathList
       });
     }
+
+    pathInfo.queryInfoFile(processLine, end);
   }
 
-  pathInfo.queryInfoFile(processLine);
-}
+  function getFoldersFromDb(req, res) {
 
-function getEpisodesInfo(req, res) {
+    function getMongoData(res) {
 
-  var lineCount = 0;
-  var progId = +(req.params.progId);
+      progDetails.find({}, function(err, docs) {
 
-  function processLine(line) {
-
-    var path = pathInfo.getPathInfo(line);
-    lineCount++;
-    if (path.id === progId){
-
-      getFolderList(path.path, function (err, list) {
-        res.send({
-          files: list
-        });
+        res.send(docs);
+        //res.send({
+        //
+        //  paths: docs
+        //});
       });
     }
+
+    getMongoData(res);
   }
 
-  pathInfo.queryInfoFile(processLine);
-}
+  // as a default, currently get the first line from the file and use that.
+  function getDefaultEpisodesInfo(req, res) {
 
-app.use(passport.initialize());
-app.use(passport.session());
+    var lineCount = 0;
 
-app.all('*', function (req, res, next) {
+    function processLine (line) {
 
-  res.header("Access-Control-Allow-Origin", "*");
-  next();
-});
+      var path = pathInfo.getPathInfo(line);
+      lineCount++;
+      if (lineCount === 1){
 
-app.get('/', getDefaultEpisodesInfo);
-app.get('/folders', getFoldersFromFile);
-app.get('/foldersDb', getFoldersFromDb);
-app.get('/:progId', getEpisodesInfo);
+        getFolderList(path.path, function (err, list) {
+          res.send({
+            files: list
+          });
+        });
+      }
+    }
 
-var server = app.listen(seedDb.appPort, function() {});
+    pathInfo.queryInfoFile(processLine);
+  }
+
+  function getEpisodesInfo(req, res) {
+
+    var lineCount = 0;
+    var progId = +(req.params.progId);
+
+    function processLine(line) {
+
+      var path = pathInfo.getPathInfo(line);
+      lineCount++;
+      if (path.id === progId){
+
+        getFolderList(path.path, function (err, list) {
+          res.send({
+            files: list
+          });
+        });
+      }
+    }
+
+    pathInfo.queryInfoFile(processLine);
+  }
+
+  app.use(passport.initialize());
+  app.use(passport.session());
+
+  app.all('*', function (req, res, next) {
+
+    res.header("Access-Control-Allow-Origin", "*");
+    next();
+  });
+
+  app.get('/', getDefaultEpisodesInfo);
+  app.get('/folders', getFoldersFromFile);
+  app.get('/foldersDb', getFoldersFromDb);
+  app.get('/:progId', getEpisodesInfo);
+
+  var server = app.listen(seedDb.appPort, function() {});
+
+})();
