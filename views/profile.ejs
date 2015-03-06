@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>Node Auth</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+  <!-- Latest compiled and minified JavaScript -->
+  <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>-->
+  <style>
+    body { padding-top: 80px; word-wrap: break-word; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="page-header text-center">
+      <h1><span class="fa fa-anchor"></span> Profil page</h1>
+      <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="well">
+          <h3><span class="fa fa-user"></span> Local</h3>
+          <p>
+            <strong>id</strong>: <%= user._id %><br>
+            <strong>email</strong>: <% user.local.email %><br>
+            <strong>password</strong>: <%= user.local.password %>
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

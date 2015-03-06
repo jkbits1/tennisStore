@@ -11,6 +11,12 @@
   var mongoose = require('mongoose');
   var passport = require('passport');
   var LocalStrategy = require('passport-local').Strategy;
+  var flash = require('connect-flash');
+
+  var morgan = require('morgan');
+  var cookieParser = require('cookie-parser');
+  var bodyParser = require('body-parser');
+  var session = require('express-session');
 
   var getFolderList = require('./fileParse');
   var pathInfo = require('./pathInfo');
@@ -23,6 +29,8 @@
   function findUser (username, fn) {
     fn(null, user)
   }
+
+  require('./config/passport')(passport);
 
   passport.use(new LocalStrategy( function (user, pwd, done) {
     process.nextTick( function (err, user) {
@@ -114,15 +122,57 @@
     pathInfo.queryInfoFile(processLine);
   }
 
+  function isLoggedIn (req, res, next) {
+    if (req.isAuthenticated()){
+      return next();
+    }
+    res.redirect('/');
+  }
+
+  app.use(morgan('dev'));
+  app.use(cookieParser());
+  app.use(bodyParser());
+
+  app.set('view engine', 'ejs');
+
+  app.use(session({secret: 'video manager'}));
   app.use(passport.initialize());
   app.use(passport.session());
+  app.use(flash());
 
   app.all('*', function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     next();
   });
-
   app.get('/', getDefaultEpisodesInfo);
+
+  app.get('/account', function (req, res) {
+    res.render('account.ejs');
+  });
+  app.get('/login', function (req, res) {
+    res.render('login.ejs', { message: req.flash('loginMessage')   })
+  });
+  app.get('/signup', function (req, res) {
+    res.render('signup.ejs', { message: req.flash ('signupMessage') });
+  });
+  app.get('/profile', isLoggedIn, function (req, res) {
+    res.render('profile.ejs', {
+      user: req.user
+    });
+  });
+
+  app.post('/signup', passport.authenticate('local-signup', {
+    successRedirect: '/profile',
+    failureRedirect: '/signup',
+    failureFlash: true
+  }));
+  app.post('/login', passport.authenticate('local-login', {
+    successRedirect: '/profile',
+    failureRedirect: '/login',
+    //failureRedirect: '/signup',
+    failureFlash: true
+  }));
+
   app.get('/folders', getFoldersFromFile);
   app.get('/foldersDb', getFoldersFromDb);
   app.get('/:progId', getEpisodesInfo);

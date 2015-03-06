@@ -24,6 +24,11 @@
     "through": "2.3.x",
     "karma": "0.12.x",
     "passport-local": "1.0.x",
-    "passport": "0.2.x"
+    "passport": "0.2.x",
+    "connect-flash": "0.1.x",
+    "bcrypt": "0.8.x",
+    "express-session": "1.10.x",
+    "ejs": "2.3.x",
+    "morgan": "1.5.x"
   }
 }
