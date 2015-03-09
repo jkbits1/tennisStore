@@ -159,9 +159,10 @@
   //http://localhost:3030/public/view1/view1.html
   //app.use('/public', express.static(__dirname + '/public'));
 
-  // works for :
-  app.use('/', express.static(__dirname + '/public'));
+  //app.use('/', express.static(__dirname + '/public'));
 
+  // enables urls in this format :
+  //  http://localhost:3030/app/#/chooseProgramme
   app.use('/app', express.static(__dirname + '/public'));
 
   app.all('*', function (req, res, next) {
