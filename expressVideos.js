@@ -129,7 +129,8 @@
     res.redirect('/');
   }
 
-  app.use(morgan('dev'));
+  //app.use(morgan('dev'));
+  app.use(morgan('combined'));
   app.use(cookieParser());
   app.use(bodyParser());
 
@@ -139,6 +140,29 @@
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(flash());
+
+  // works for these urls, when view1 folder directly beneath root
+  //http://localhost:3030/view1/view1.html
+  //http://localhost:3030/chooseProgramme
+  //app.use('/view1', express.static(__dirname + '/view1'));
+
+  // works for these urls, when viewX folder beneath public
+  //http://localhost:3030/view1/view1.html
+  //http://localhost:3030/chooseProgramme
+  //app.use('/view1', express.static(__dirname + '/public/view1'));
+  //app.use('/view2', express.static(__dirname + '/public/view2'));
+
+  //app.use('/view1', express.static('/public/view1'));
+
+  // works for :
+  //http://localhost:3030/public/app.css
+  //http://localhost:3030/public/view1/view1.html
+  //app.use('/public', express.static(__dirname + '/public'));
+
+  // works for :
+  app.use('/', express.static(__dirname + '/public'));
+
+  app.use('/app', express.static(__dirname + '/public'));
 
   app.all('*', function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -175,6 +199,15 @@
 
   app.get('/folders', getFoldersFromFile);
   app.get('/foldersDb', getFoldersFromDb);
+
+  //NOTE: this route needs to be placed before
+  //      /:progId route. Reasons not fully
+  //      understood yet.
+  //app.get('/chooseProgramme/', function (req, res) {
+  app.get('/app/', function (req, res) {
+    res.sendfile('./public/index.html');
+  });
+
   app.get('/:progId', getEpisodesInfo);
 
   var server = app.listen(seedDb.appPort, function() {});
