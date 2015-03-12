@@ -18,6 +18,10 @@
   var bodyParser = require('body-parser');
   var session = require('express-session');
 
+  //var templatePath = require.resolve('./template.jade');
+  var templatePath = require.resolve('./views/manageFolders.jade');
+  var templateFn = require('jade').compileFile(templatePath);
+
   var getFolderList = require('./fileParse');
   var pathInfo = require('./pathInfo');
   var seedDb = require('./seedDb');
@@ -136,6 +140,10 @@
 
   app.set('view engine', 'ejs');
 
+  // NOTE: may decide to use multiple
+  //       view engines sometime.
+  //app.set('view engine', jade);
+
   app.use(session({secret: 'video manager'}));
   app.use(passport.initialize());
   app.use(passport.session());
@@ -167,6 +175,7 @@
 
   app.all('*', function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, x-Requested-With, Content-Type, Accept");
     next();
   });
   app.get('/', getDefaultEpisodesInfo);
@@ -177,6 +186,10 @@
   app.get('/login', function (req, res) {
     res.render('login.ejs', { message: req.flash('loginMessage')   })
   });
+  app.get('/logout', function (req, res) {
+    req.logout();
+    res.redirect('/');
+  });
   app.get('/signup', function (req, res) {
     res.render('signup.ejs', { message: req.flash ('signupMessage') });
   });
@@ -185,6 +198,26 @@
       user: req.user
     });
   });
+  app.get('/manageFolders', isLoggedIn, function (req, res) {
+
+    progDetails.find({}, function (err, docs) {
+
+      //res.send(docs);
+      //res.send({
+      //
+      //  paths: docs
+      //});
+
+      res.write(templateFn({ user: req.user,
+        //folders: [{name: 'one', value: 1}, {name: 'two', value: 2}]
+        folders: docs
+      }));
+      res.end();
+    });
+
+
+  });
+
 
   app.post('/signup', passport.authenticate('local-signup', {
     successRedirect: '/profile',
@@ -197,6 +230,34 @@
     //failureRedirect: '/signup',
     failureFlash: true
   }));
+
+  //app.post('/loginClient', passport.authenticate('local-login', function (req, res){
+  // code from passport custom callback - using for debugging purposes
+  app.post('/loginClient', function (req, res, next) {
+      passport.authenticate('local-login', function (err, user, info) {
+        if (err) {
+          console.error("failed login");
+
+          return next(err);
+        }
+        if (!user) {
+          console.error("failed pwd");
+
+          return res.redirect('/login');
+        }
+
+        req.logIn(user, function (err) {
+          if (err) {
+            console.error("failed login 2");
+            return next(err);
+          }
+
+          //return res.redirect('/manageFolders');
+          return res.send({ loggedIn: 'test123' });
+        });
+      })(req, res, next);
+  });
+
 
   app.get('/folders', getFoldersFromFile);
   app.get('/foldersDb', getFoldersFromDb);
