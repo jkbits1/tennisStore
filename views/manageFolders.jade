@@ -1,0 +1,21 @@
+// Created by jk on 09/03/15.
+
+if (!user)
+  a(href="/login") Login
+  br
+  a(href="/register") Register
+if (user)
+  //p You are currently logged in as #{user.username}
+  p You are currently logged in as #{user.local.email}
+  a(href="/logout") Logout
+
+
+  //  ul
+  //each val, index in {1:'one',2:'two',3:'three'}
+  //li= index + ': ' + val
+
+
+  ul
+    each folder in folders
+      //li #{folder.name} : #{folder.value}
+      li #{folder._doc.path} : #{folder._doc.id}
