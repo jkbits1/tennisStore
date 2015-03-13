@@ -201,13 +201,7 @@
   app.get('/manageFolders', isLoggedIn, function (req, res) {
 
     progDetails.find({}, function (err, docs) {
-
       //res.send(docs);
-      //res.send({
-      //
-      //  paths: docs
-      //});
-
       res.write(templateFn({ user: req.user,
         //folders: [{name: 'one', value: 1}, {name: 'two', value: 2}]
         folders: docs
@@ -217,7 +211,24 @@
 
 
   });
+  app.post('/addPath', isLoggedIn, function (req, res) {
 
+    var id = +(req.body.id);
+    var path = req.body.path;
+    var name = req.body.name;
+
+    console.error("id:", id);
+    console.error("name:", name);
+    console.error("path:", path);
+
+    //progDetails.insert({id: id, name: name, path: path}, function(err, result){
+    progDetails.create({id: id, name: name, path: path}, function(err, result){
+      if (err) {
+        console.error("couldn't add path");
+      }
+      res.redirect('/manageFolders');
+    });
+  });
 
   app.post('/signup', passport.authenticate('local-signup', {
     successRedirect: '/profile',
