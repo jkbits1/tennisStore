@@ -9,13 +9,19 @@ if (user)
   p You are currently logged in as #{user.local.email}
   a(href="/logout") Logout
 
-
-  //  ul
-  //each val, index in {1:'one',2:'two',3:'three'}
-  //li= index + ': ' + val
-
-
   ul
     each folder in folders
       //li #{folder.name} : #{folder.value}
       li #{folder._doc.path} : #{folder._doc.id}
+
+  form(role='form', action="/addPath", method="post", style='max-width: 300px;')
+    .form-group
+      input.form-control(type='text', name='name', placeholder='name')
+    .form-group
+      input.form-control(type='text', name='path', placeholder='path...')
+    .form-group
+      input.form-control(type='text', name='id', placeholder='id...')
+    button.btn.btn-default(type='submit') Add Path
+    &nbsp;
+    a(href='/')
+      button.btn.btn-primary(type='button') Cancel
