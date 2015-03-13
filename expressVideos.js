@@ -110,13 +110,22 @@
     var lineCount = 0;
     var progId = +(req.params.progId);
 
+    var progInfoFound = false;
+
     //function processLine (line) {
     function processPathInfo (pathInfo) {
       //var path = pathInfo.getPathInfo(line);
 
       lineCount++;
       if (pathInfo._doc.id === progId){
+        progInfoFound = true;
         getFolderList(pathInfo._doc.path, function (err, list) {
+          if (err) {
+            console.log("no episodes found", err);
+            res.redirect('/');
+
+            return;
+          }
           res.send({
             files: list
           });
@@ -127,6 +136,12 @@
     //pathInfo.queryInfoFile(processLine);
     progDetails.find({}, function (err, docs) {
       docs.forEach(processPathInfo);
+
+      // no valid info found, redirect
+      if (progInfoFound === false) {
+        //res.redirect('/chooseProgram');
+        res.redirect('/');
+      }
     });
   }
 
