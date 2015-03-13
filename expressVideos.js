@@ -110,12 +110,13 @@
     var lineCount = 0;
     var progId = +(req.params.progId);
 
-    function processLine (line) {
-      var path = pathInfo.getPathInfo(line);
+    //function processLine (line) {
+    function processPathInfo (pathInfo) {
+      //var path = pathInfo.getPathInfo(line);
 
       lineCount++;
-      if (path.id === progId){
-        getFolderList(path.path, function (err, list) {
+      if (pathInfo._doc.id === progId){
+        getFolderList(pathInfo._doc.path, function (err, list) {
           res.send({
             files: list
           });
@@ -123,7 +124,10 @@
       }
     }
 
-    pathInfo.queryInfoFile(processLine);
+    //pathInfo.queryInfoFile(processLine);
+    progDetails.find({}, function (err, docs) {
+      docs.forEach(processPathInfo);
+    });
   }
 
   function isLoggedIn (req, res, next) {
