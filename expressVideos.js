@@ -273,7 +273,8 @@
         if (!user) {
           console.error("failed pwd");
 
-          return res.redirect('/login');
+          //return res.redirect('/login');
+          return res.send(401, "Bad login info");
         }
 
         req.logIn(user, function (err) {
@@ -283,7 +284,9 @@
           }
 
           //return res.redirect('/manageFolders');
-          return res.send({ loggedIn: 'test123' });
+          //return res.send({ loggedIn: 'test123' });
+          //return res.send(user);
+          return res.send(user._doc.local.email);
         });
       })(req, res, next);
   });
