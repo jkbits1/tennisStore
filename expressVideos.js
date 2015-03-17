@@ -71,19 +71,22 @@
     pathInfo.queryInfoFile(processLine, end);
   }
 
+  //function getMongoData (res, callback) {
+  //  progDetails.find({}, callback);
+  //}
+
   function getFoldersFromDb (req, res) {
+    progDetails.find({}, function(err, docs){
+      if (err) {
+        return res.send(401, "folders not found");
+      }
 
-    function getMongoData (res) {
-      progDetails.find({}, function (err, docs) {
-        res.send(docs);
-        //res.send({
-        //
-        //  paths: docs
-        //});
-      });
-    }
-
-    getMongoData(res);
+      res.send(docs);
+      //res.send({
+      //
+      //  paths: docs
+      //});
+    });
   }
 
   // as a default, currently get the first line from the file and use that.
