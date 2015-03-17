@@ -27,11 +27,14 @@ div.container
 
     form(role='form', action="/addPath", method="post", style='max-width: 300px;')
       .form-group
-        input.form-control(type='text', name='name', placeholder='name')
+        label(for="name") Name
+        input.form-control(type='text', name='name', placeholder='name' id="name")
       .form-group
-        input.form-control(type='text', name='path', placeholder='path...')
+        label(for="path")
+        input.form-control(type='text', name='path', placeholder='path...' id="path")
       .form-group
-        input.form-control(type='text', name='id', placeholder='id...')
+        label(for="id")
+        input.form-control(type='text', name='id', placeholder='id...' id="id")
       button.btn.btn-default(type='submit') Add Path
       &nbsp;
       a(href='/')
