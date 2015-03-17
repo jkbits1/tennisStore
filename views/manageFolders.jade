@@ -1,29 +1,41 @@
 // Created by jk on 09/03/15.
 
-if (!user)
-  a(href="/login") Login
-  br
-  a(href="/register") Register
-if (user)
-  //p You are currently logged in as #{user.username}
-  p You are currently logged in as #{user.local.email}
-  a(href="/logout") Logout
+doctype html
 
-  ul
-    each folder in folders
-      //li #{folder.name} : #{folder.value}
-      li #{folder._doc.path} : #{folder._doc.id}
+link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css")
+link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css")
 
-  form(role='form', action="/addPath", method="post", style='max-width: 300px;')
-    .form-group
-      input.form-control(type='text', name='name', placeholder='name')
-    .form-group
-      input.form-control(type='text', name='path', placeholder='path...')
-    .form-group
-      input.form-control(type='text', name='id', placeholder='id...')
-    button.btn.btn-default(type='submit') Add Path
-    &nbsp;
-    a(href='/')
-      button.btn.btn-primary(type='button') Cancel
+//div(class="container")
+div.container
 
-a(href="/app/") Choose Programme
+  if (!user)
+    a(href="/login") Login
+    br
+    a(href="/register") Register
+  if (user)
+    //p You are currently logged in as #{user.username}
+    p You are currently logged in as #{user.local.email}
+    a(href="/logout") Logout
+
+    h1.title Manage Folders
+    hr
+
+    ul
+      each folder in folders
+        //li #{folder.name} : #{folder.value}
+        li #{folder._doc.path} : #{folder._doc.id}
+
+    form(role='form', action="/addPath", method="post", style='max-width: 300px;')
+      .form-group
+        input.form-control(type='text', name='name', placeholder='name')
+      .form-group
+        input.form-control(type='text', name='path', placeholder='path...')
+      .form-group
+        input.form-control(type='text', name='id', placeholder='id...')
+      button.btn.btn-default(type='submit') Add Path
+      &nbsp;
+      a(href='/')
+        button.btn.btn-primary(type='button') Cancel
+
+  a(href="/app/") Choose Programme
+
