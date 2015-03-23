@@ -13,7 +13,7 @@
   var LocalStrategy = require('passport-local').Strategy;
   var flash = require('connect-flash');
 
-  var morgan = require('morgan');
+  //var morgan = require('morgan');
   var cookieParser = require('cookie-parser');
   var bodyParser = require('body-parser');
   var session = require('express-session');
@@ -156,7 +156,7 @@
   }
 
   //app.use(morgan('dev'));
-  app.use(morgan('combined'));
+  //app.use(morgan('combined'));
   app.use(cookieParser());
   app.use(bodyParser());
 
