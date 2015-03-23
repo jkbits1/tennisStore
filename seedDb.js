@@ -9,6 +9,7 @@
 
   var mainDbName = undefined;
   var testDbName = undefined;
+  var appPort = 3030;
 
   var db = undefined;
 
@@ -26,6 +27,8 @@
 
       mainDbName = process.env.MONGOLAB_URI;
       testDbName = "mongodb://localhost/proginfoTest";
+
+      appPort = process.env.PORT;
     }
     else if (process.env.NODE_ENV === "development") {
       console.error("NODE_ENV = development");
@@ -52,7 +55,7 @@
     createDbSeedsFromFile: createDbSeedsFromFile,
     mainDbName: mainDbName,
     testDbName: testDbName,
-    appPort: 3030
+    appPort: appPort
   };
 
   function setUpDb (dbName) {
