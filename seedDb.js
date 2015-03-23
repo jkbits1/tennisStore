@@ -7,13 +7,45 @@
   var mongoose = require('mongoose');
   var pathInfo = require('./pathInfo');
 
+  var mainDbName = undefined;
+  var testDbName = undefined;
+
   var db = undefined;
+
+  if (process.env.NODE_ENV !== undefined) {
+    console.error("NODE_ENV exists");
+
+    if (process.env.NODE_ENV === "production") {
+      console.error("NODE_ENV = production");
+
+      mainDbName = "mongodb://localhost/proginfo";
+      testDbName = "mongodb://localhost/proginfoTest";
+    }
+    else if (process.env.NODE_ENV === "development") {
+      console.error("NODE_ENV = development");
+
+      mainDbName = "mongodb://localhost/proginfo";
+      testDbName = "mongodb://localhost/proginfoTest";
+    }
+    else {
+      console.error("NODE_ENV = other");
+
+      mainDbName = "mongodb://localhost/proginfo";
+      testDbName = "mongodb://localhost/proginfoTest";
+    }
+  }
+  else {
+    console.error("no NODE_ENV found");
+
+    mainDbName = "mongodb://localhost/proginfo";
+    testDbName = "mongodb://localhost/proginfoTest";
+  }
 
   module.exports = {
     setUpDb: setUpDb,
     createDbSeedsFromFile: createDbSeedsFromFile,
-    mainDbName: "mongodb://localhost/proginfo",
-    testDbName: "mongodb://localhost/proginfoTest",
+    mainDbName: mainDbName,
+    testDbName: testDbName,
     appPort: 3030
   };
 
