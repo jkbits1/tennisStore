@@ -18,7 +18,13 @@
     if (process.env.NODE_ENV === "production") {
       console.error("NODE_ENV = production");
 
-      mainDbName = "mongodb://localhost/proginfo";
+      //mainDbName = "mongodb://localhost/proginfo";
+
+      if (process.env.MONGOLAB_URI === undefined) {
+        console.error("no URI defined");
+      }
+
+      mainDbName = process.env.MONGOLAB_URI;
       testDbName = "mongodb://localhost/proginfoTest";
     }
     else if (process.env.NODE_ENV === "development") {
