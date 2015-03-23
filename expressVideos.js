@@ -13,7 +13,7 @@
   var LocalStrategy = require('passport-local').Strategy;
   var flash = require('connect-flash');
 
-  //var morgan = require('morgan');
+  var morgan = require('morgan');
   var cookieParser = require('cookie-parser');
   var bodyParser = require('body-parser');
   var session = require('express-session');
@@ -76,6 +76,9 @@
   //}
 
   function getFoldersFromDb (req, res) {
+
+    console.error("folders db requested");
+
     progDetails.find({}, function(err, docs){
       if (err) {
         return res.send(401, "folders not found");
@@ -156,7 +159,7 @@
   }
 
   //app.use(morgan('dev'));
-  //app.use(morgan('combined'));
+  app.use(morgan('combined'));
   app.use(cookieParser());
   app.use(bodyParser());
 
@@ -308,5 +311,7 @@
 
   app.get('/:progId', getEpisodesInfo);
 
-  var server = app.listen(seedDb.appPort, function() {});
+  var server = app.listen(seedDb.appPort, function() {
+    console.error("started server");
+  });
 })();
