@@ -1,0 +1,47 @@
+<div>
+  <p>This is the partial for view 1.</p>
+
+  {{ "stuff to do" + "!" }}
+
+  <ul>
+    <!--<li ng-repeat="note in notes">-->
+    <li ng-repeat="note in files" data-index-num="{{note.id}}">
+      <p>{{note.item}}</p>
+      <p>{{note.info}}</p>
+      <ol>
+        <button ng-click="addPlayer2(note.id, newPlayer)">Add player</button>
+        <li ng-repeat="player in note.players">
+          <p>{{player}}</p>
+        </li>
+      </ol>
+
+      <div ng-show="note.itemx">
+        edit fields
+      </div>
+    </li>
+  </ul>
+
+  <input ng-model="newPlayer">
+
+  <button ng-click="addPlayer(newPlayer)">Add player</button>
+
+  <ul>
+    <li ng-repeat="file in files">
+      <!--<p>key: {{file.key}}</p>-->
+      <!--<p>value: {{file.value}}</p>-->
+
+      <p>{{file.id}}</p>
+      <p>{{file.item}}</p>
+      <p>{{file.info}}</p>
+
+      <ul ng-repeat="player in file.players">
+        <li>
+          <p>{{player}}</p>
+        </li>
+      </ul>
+
+    </li>
+  </ul>
+
+  <button ng-click="postNote()">Send Note</button>
+</div>
