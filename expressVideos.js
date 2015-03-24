@@ -93,35 +93,51 @@
   }
 
   // as a default, currently get the first line from the file and use that.
+  //NOTE: revised to default to db access
   function getDefaultEpisodesInfo (req, res) {
     var lineCount = 0;
+    var progInfoFound = false;
 
-    function processLine (line) {
-      var path = pathInfo.getPathInfo(line);
+    function processLine(line) {
+      function processPathInfo(pathInfo) {
+        //var path = pathInfo.getPathInfo(line);
 
-      lineCount++;
-      if (lineCount === 1) {
-        getFolderList(path.path, function (err, list) {
-          res.send({
-            files: list
+        lineCount++;
+        if (lineCount === 1) {
+          progInfoFound = true;
+          getFolderList(pathInfo._doc.path, function (err, list) {
+            res.send({
+              files: list
+            });
           });
-        });
+        }
       }
-    }
 
-    pathInfo.queryInfoFile(processLine);
+      //pathInfo.queryInfoFile(processLine);
+      progDetails.find({}, function (err, docs) {
+
+        //NOTE: possibly may create endless loop here
+        if (err) {
+          return res.redirect('/');
+        }
+
+        docs.forEach(processPathInfo);
+
+        // no valid info found, redirect
+        if (progInfoFound === false) {
+          //NOTE: possibly may create endless loop here
+          res.redirect('/');
+        }
+      });
+    }
   }
 
   function getEpisodesInfo (req, res) {
     var lineCount = 0;
     var progId = +(req.params.progId);
-
     var progInfoFound = false;
 
-    //function processLine (line) {
     function processPathInfo (pathInfo) {
-      //var path = pathInfo.getPathInfo(line);
-
       lineCount++;
       if (pathInfo._doc.id === progId){
         progInfoFound = true;
@@ -139,13 +155,13 @@
       }
     }
 
-    //pathInfo.queryInfoFile(processLine);
     progDetails.find({}, function (err, docs) {
+      if (err) {
+        return res.redirect('/');
+      }
       docs.forEach(processPathInfo);
-
       // no valid info found, redirect
       if (progInfoFound === false) {
-        //res.redirect('/chooseProgram');
         res.redirect('/');
       }
     });
