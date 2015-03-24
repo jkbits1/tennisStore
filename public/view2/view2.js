@@ -61,7 +61,7 @@ view2Module.factory('filenameService', function () {
 
       return function() {
 
-        if ($scope.files === undefined) {
+        if ($scope.files === undefined || $scope.files.length === 0) {
           return "";
         }
 
