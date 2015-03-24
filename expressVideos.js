@@ -105,44 +105,44 @@
 
     console.error('getDefaultEpisodesInfo - starting');
 
-    function processLine(line) {
-      function processPathInfo(pathInfo) {
-        //var path = pathInfo.getPathInfo(line);
-        console.error('getDefaultEpisodesInfo - handling path info');
+    //function processLine(line) {
+    function processPathInfo(pathInfo) {
+      //var path = pathInfo.getPathInfo(line);
+      console.error('getDefaultEpisodesInfo - handling path info');
 
-        lineCount++;
-        if (lineCount === 1) {
-          progInfoFound = true;
-          getFolderList(pathInfo._doc.path, function (err, list) {
-            res.send({
-              files: list
-            });
+      lineCount++;
+      if (lineCount === 1) {
+        progInfoFound = true;
+        getFolderList(pathInfo._doc.path, function (err, list) {
+          res.send({
+            files: list
           });
-        }
+        });
+      }
+    }
+
+    //pathInfo.queryInfoFile(processLine);
+    progDetails.find({}, function (err, docs) {
+
+      console.error('getDefaultEpisodesInfo - db responded');
+
+      //NOTE: possibly may create endless loop here
+      if (err) {
+        console.error('getDefaultEpisodesInfo - error');
+        return res.redirect('/');
       }
 
-      //pathInfo.queryInfoFile(processLine);
-      progDetails.find({}, function (err, docs) {
+      docs.forEach(processPathInfo);
 
-        console.error('getDefaultEpisodesInfo - db responded');
+      // no valid info found, redirect
+      if (progInfoFound === false) {
+        console.error('getDefaultEpisodesInfo - no data, sending empty object');
 
         //NOTE: possibly may create endless loop here
-        if (err) {
-          console.error('getDefaultEpisodesInfo - error');
-          return res.redirect('/');
-        }
-
-        docs.forEach(processPathInfo);
-
-        // no valid info found, redirect
-        if (progInfoFound === false) {
-          console.error('getDefaultEpisodesInfo - no data, redirecting');
-
-          //NOTE: possibly may create endless loop here
-          res.redirect('/');
-        }
-      });
-    }
+        //res.redirect('/');
+        res.send({});
+      }
+    });
   }
 
   function getEpisodesInfo (req, res) {
