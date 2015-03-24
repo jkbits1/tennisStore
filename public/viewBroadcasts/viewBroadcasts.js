@@ -48,7 +48,13 @@ viewBroadcastsModule.controller('ViewBroadcastsCtrl', ['$rootScope', '$scope', '
   //$http.get('http://localhost:3030' + progIdUriSegment)
   $http.get('' + progIdUriSegment)
       .success(function (data, status, headers, config) {
-        $scope.files = data.files;
+
+        if (data.files !== undefined) {
+          $scope.files = data.files;
+        }
+        else {
+          $scope.files = [];
+        }
 
         //var t1a = filenameService.getFileName("1");
         var getFileName = filenameService.getFileName;
