@@ -6,6 +6,7 @@
 //  elsewhere. This may well be an unnecessary addition.
 (function(){
   var express = require('express');
+  var favicon = require('serve-favicon');
   var fs = require('fs');
   var split = require('split');
   var mongoose = require('mongoose');
@@ -187,7 +188,8 @@
     res.redirect('/');
   }
 
-  app.use(express.favicon());
+  //app.use(express.favicon());
+  app.use(favicon(__dirname + '/images/favicon.ico'));
 
   //app.use(morgan('dev'));
   app.use(morgan('combined'));
