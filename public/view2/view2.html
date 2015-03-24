@@ -1,0 +1,54 @@
+<!--<p>This is the partial for view 2.</p>-->
+<!--<p>-->
+  <!--Showing of 'interpolate' filter:-->
+  <!--{{ 'Current version is v%VERSION%.' | interpolate }}-->
+<!--</p>-->
+
+<h1>Episode Guide</h1>
+<!--Episode Guide-->
+<!--<br>-->
+
+<!--<div class="twoCols">-->
+<div>
+  <span class="colHeadings">Type:</span>TV Program
+  <br>
+  <!--<span class="col1">-->
+  <span class="colHeadings">Name:</span>{{fileName}}
+  <!--<div class="col2">-->
+  <br>
+  <!--<span class="colHeadings">First and last broadcast dates</span>-->
+  <span class="colHeadings">First broadcast:</span> {{getFirstEpisodeDate()}}
+  <br>
+  <span class="colHeadings">Last:</span> {{getLastEpisodeDate()}}
+  <br>
+  <span class="colHeadings">Number of episodes:</span> {{getEpisodeCount()}}
+  <br>
+</div>
+
+<div class="col2">
+</div>
+<br>
+
+<div class="colAll">
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam cursus dignissim dui a pretium. Integer eget tellus orci. Mauris fermentum aliquam quam sit amet iaculis. Praesent viverra urna elit, id lacinia ex rutrum nec. Curabitur euismod feugiat nisl, sit amet feugiat enim semper in. Fusce in magna turpis. Ut quis dui mi.
+</div>
+
+<!--<br>-->
+
+<!--<ul>-->
+  <!--<li ng-repeat="file in files">{{file.fileName}} - {{file.date}} - {{getDateAsString(file.date)}}</li>-->
+  <!--<li ng-repeat="file in files">{{file.fileName}} - {{getDateAsString(file.date)}}</li>-->
+<!--</ul>-->
+
+
+<br>
+<!--<p ng-repeat="file in files">-->
+<p ng-repeat="dateInfo in fileDates">
+  <span class="colHeadings">
+    <span class="colYearHeading">{{dateInfo.year}}&nbsp;</span>
+    {{dateInfo.month}}
+  </span>
+  <!--{{file.fileName}} - {{getDateAsString(file.date)}}-->
+
+  <span class="colDay">{{dateInfo.day}}</span>
+</p>
