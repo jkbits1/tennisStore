@@ -340,6 +340,11 @@
 
   app.get('/:progId', getEpisodesInfo);
 
+  //NOTE: temporary handling of keep-alive request
+  app.get('/favicon.ico', function (req, res) {
+    res.send({});
+  });
+
   var server = app.listen(seedDb.appPort, function() {
     console.error("started server");
   });
