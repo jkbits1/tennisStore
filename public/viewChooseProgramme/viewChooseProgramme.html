@@ -1,0 +1,62 @@
+
+<!--<p>selected path: {{selectedPath}}</p>-->
+<!--<select ng-model="selectedPath">-->
+<!--<option ng-repeat="path in paths" value="{{path}}">{{path}}</option>-->
+<!--</select>-->
+
+<!--<p>selected path2: {{selectedPath2}}</p>-->
+<!--<select ng-model="selectedPath2" ng-options="path for   path in paths">-->
+<!--</select>-->
+<div class="container">
+
+  <div class="headline headline__large">
+    <div class="heading__cell">
+      <h1 class="title">Episode Guide <small>- Choose Programme</small></h1>
+    </div>
+  </div>
+  <!--choose Programme view-->
+
+  <br>
+  <div class="row">
+    <div class="col-md-2"><strong>Name:</strong></div>
+    <div class="col-md-3">{{selectedProgramme.name}}</div>
+    <!--<br>-->
+  </div>
+  <div class="row">
+    <div class="col-md-2"><strong>Path:</strong></div>
+    <div class="col-md-3">{{selectedProgramme.path}}</div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-2"><strong>Id:</strong></div>
+    <div class="col-md-3">{{selectedProgramme.id}}</div>
+  </div>
+
+  <br>
+
+  <div class="input-group">
+    <select class="input-lg" ng-model="selectedProgramme"
+          ng-options="path as path.name for path in paths"
+          ng-change="changeProgramme()">
+    </select>
+    <!--ng-options="path as path.path for path in paths"-->
+  </div>
+
+  <br>     <br>
+
+  <div class="row">
+    <div class="col-md-2">
+      <a class="btn btn-default" href="#/viewBroadcasts/{{progId}}" role="button">View Episodes</a>
+    </div>
+    <div class="col-md-3">
+
+    </div>
+  </div>
+
+
+  <!--<ul ng-repeat="path in paths">-->
+  <!--<li>{{path}}</li>-->
+  <!--</ul>-->
+
+</div>
+  <br>
