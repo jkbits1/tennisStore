@@ -84,6 +84,8 @@
         return res.send(401, "folders not found");
       }
 
+      console.error("folders db - sending");
+
       res.send(docs);
       //res.send({
       //
