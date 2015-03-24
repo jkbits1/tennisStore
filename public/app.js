@@ -101,11 +101,13 @@ myApp
     return {
       login: function (credentials) {
         //return $http.post('/login', credentials);
-        return $http.post('http://localhost:3030/loginClient', credentials);
+        //return $http.post('http://localhost:3030/loginClient', credentials);
+        return $http.post('/loginClient', credentials);
       },
       logout: function () {
         //return $http.get('/api/logout');
-        return $http.get('http://localhost:3030/logout');
+        //return $http.get('http://localhost:3030/logout');
+        return $http.get('/logout');
       }
     };
   }]);

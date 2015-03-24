@@ -25,7 +25,8 @@ manageModule.controller('manageFoldersCtrl', ['$rootScope', '$scope', '$http', f
     path: ''
   };
 
-  $http.get('http://localhost:3030/foldersDb')
+  //$http.get('http://localhost:3030/foldersDb')
+  $http.get('/foldersDb')
     .success(function (data, status, headers, config) {
       $scope.folders = data;
     })
@@ -34,7 +35,8 @@ manageModule.controller('manageFoldersCtrl', ['$rootScope', '$scope', '$http', f
     });
 
   $scope.addFolder = function (folderInfo) {
-    $http.post('http://localhost:3030/addPath', folderInfo)
+    //$http.post('http://localhost:3030/addPath', folderInfo)
+    $http.post('/addPath', folderInfo)
       .success(function (data, status, headers, config) {
 
     })

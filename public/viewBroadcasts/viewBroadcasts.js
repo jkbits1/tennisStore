@@ -45,7 +45,8 @@ viewBroadcastsModule.controller('ViewBroadcastsCtrl', ['$rootScope', '$scope', '
     progIdUriSegment = "/" + $cookies.selectedProgramme;
   }
 
-  $http.get('http://localhost:3030' + progIdUriSegment)
+  //$http.get('http://localhost:3030' + progIdUriSegment)
+  $http.get('' + progIdUriSegment)
       .success(function (data, status, headers, config) {
         $scope.files = data.files;
 

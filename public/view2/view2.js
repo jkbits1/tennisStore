@@ -139,7 +139,8 @@ view2Module.controller('View2Ctrl', ['$rootScope', '$scope', '$http', '$routePar
     progIdUriSegment = "/" + $rootScope.progId;
   }
 
-  $http.get('http://localhost:3030' + progIdUriSegment)
+  //$http.get('http://localhost:3030' + progIdUriSegment)
+  $http.get('' + progIdUriSegment)
     .success(function (data, status, headers, config) {
       $scope.files = data.files;
 
