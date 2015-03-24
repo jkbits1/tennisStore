@@ -101,6 +101,7 @@
     function processLine(line) {
       function processPathInfo(pathInfo) {
         //var path = pathInfo.getPathInfo(line);
+        console.error('getDefaultEpisodesInfo - handling path info');
 
         lineCount++;
         if (lineCount === 1) {
@@ -118,6 +119,7 @@
 
         //NOTE: possibly may create endless loop here
         if (err) {
+          console.error('getDefaultEpisodesInfo - error');
           return res.redirect('/');
         }
 
@@ -125,6 +127,8 @@
 
         // no valid info found, redirect
         if (progInfoFound === false) {
+          console.error('getDefaultEpisodesInfo - no data, redirecting');
+
           //NOTE: possibly may create endless loop here
           res.redirect('/');
         }
