@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" ng-app="myApp" ng-controller="indexCtrl" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="myApp" ng-controller="indexCtrl" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="myApp" ng-controller="indexCtrl" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="myApp" ng-controller="indexCtrl" class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Episode Guide</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" ng-href="{{normalize_css}}">
+  <!--<link rel="stylesheet" ng-href="bower_components/html5-boilerplate/css/normalize.css">-->
+  <link rel="stylesheet" ng-href="{{bower_main_css}}">
+  <!--<link rel="stylesheet" href="bower_components/html5-boilerplate/css/main.css">-->
+
+  <!--------------->
+  <!-- new start -->
+
+  <!--<link href="bootstrap/bootstrap.min.css" rel="stylesheet">-->
+  <!--<link href="bootstrap/bootstrap.css" rel="stylesheet">-->
+  <link ng-href="{{bootstrap_css}}" rel="stylesheet">
+  <!--<link href="bootstrap/docs.css" rel="stylesheet">-->
+  <link ng-href="{{bootstrap_extra_css}}" rel="stylesheet">
+  <link ng-href="{{bootstrap_external_css}}" rel="stylesheet">
+  <link ng-href="{{bootstrap_docs_css}}" rel="stylesheet">
+
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <!--<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>-->
+  <script ng-src="{{html5shiv_js}}"></script>
+  <!--<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>-->
+  <script ng-src="{{respond_js}}"></script>
+  <![endif]-->
+
+  <!-- new end-->
+  <!------------>
+
+  <!--------------------------------------------->
+  <!--add these for non-Bootstrap page - start -->
+
+  <!--<link rel="stylesheet" href="app.css">-->
+  <link rel="stylesheet" ng-href="{{app_css}}">
+  <!--<link rel="stylesheet" href="view2.css">-->
+  <link rel="stylesheet" ng-href="{{view2_css}}">
+
+  <!--add these for non-Bootstrap page - end -->
+  <!------------------------------------------->
+
+  <!--<script src="bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>-->
+</head>
+<body>
+  <header>
+    <!--<div admin-login class="col-md-3 pull-right"></div>-->
+    <div class="sidebar-nav">
+      <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="menu nav navbar-nav">
+              <li><a href="#/view1">Others</a></li>
+              <li><a href="#/view2/{{progId}}">Alt List</a></li>
+              <li><a href="#/viewBroadcasts">Episode List</a></li>
+              <li><a href="#/chooseProgramme">Choose Programme</a></li>
+            </ul>
+            <ul admin-login class="menu nav navbar-nav navbar-right"></ul>
+            <!--
+            <ul class="menu nav navbar-nav navbar-right">
+              <li><a href="#/login">Login</a></li>
+            </ul>
+            -->
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+  <![endif]-->
+
+  <div class="container-full">
+    <br>
+    <br>
+    <br>
+    <div ng-view></div>
+
+    <!--<select ng-model="indexCss" ng-change="toggleCss()">-->
+      <!--<option value="bootstrap">Bootstrap</option>-->
+      <!--<option value="angular">Angular</option>-->
+    <!--</select>-->
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <div class="container">
+    <select ng-model="selectedCss"
+            ng-options="opt as opt.label for opt in cssOptions"
+            ng-change="toggleCss()">
+    </select>
+
+    <div>Angular seed app: v<span app-version></span></div>
+
+    </div>
+  </div>
+
+  <!-- In production use:
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
+  -->
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+  <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+  <script src="app.js"></script>
+  <script src="view1/view1.js"></script>
+  <script src="view2/view2.js"></script>
+  <script src="viewBroadcasts/viewBroadcasts.js"></script>
+  <script src="viewChooseProgramme/viewChooseProgramme.js"></script>
+  <script src="viewLogin/viewLogin.js"></script>
+  <script src="viewManageFolders/viewManageFolders.js"></script>
+  <script src="components/version/version.js"></script>
+  <script src="components/version/version-directive.js"></script>
+  <script src="components/version/interpolate-filter.js"></script>
+</body>
+</html>

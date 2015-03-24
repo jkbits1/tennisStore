@@ -339,7 +339,7 @@
   //      understood yet.
   //app.get('/chooseProgramme/', function (req, res) {
   app.get('/app/', function (req, res) {
-    res.sendfile('./public/index.html');
+    res.sendfile('/public/index.html');
   });
 
   app.get('/:progId', getEpisodesInfo);
