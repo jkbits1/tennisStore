@@ -80,6 +80,9 @@
     console.error("folders db requested");
 
     progDetails.find({}, function(err, docs){
+
+      console.error('folders db - db responded');
+
       if (err) {
         return res.send(401, "folders not found");
       }
@@ -120,6 +123,8 @@
 
       //pathInfo.queryInfoFile(processLine);
       progDetails.find({}, function (err, docs) {
+
+        console.error('getDefaultEpisodesInfo - db responded');
 
         //NOTE: possibly may create endless loop here
         if (err) {
