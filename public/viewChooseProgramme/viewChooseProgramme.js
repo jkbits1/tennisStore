@@ -32,7 +32,8 @@ chooseModule.controller('chooseProgrammeCtrl', ['$rootScope', '$scope', '$http',
   };
 
   //$http.get('http://localhost:3030/folders')
-  $http.get('http://localhost:3030/foldersDb')
+  //$http.get('http://localhost:3030/foldersDb')
+  $http.get('/foldersDb')
     .success(function (data, status, headers, config) {
 
       //$scope.paths = data.paths;
