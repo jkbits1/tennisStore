@@ -1,0 +1,9 @@
+<li ng-if=loggedInUser>
+  <a href="#/manageFolders">Welcome {{loggedInUser}}</a>
+</li>
+<li ng-if=loggedInUser>
+  <a href ng-click='logout()'>Logout</a>
+</li>
+<li ng-if=!loggedInUser>
+  <a href="#/login">Login</a>
+</li>
