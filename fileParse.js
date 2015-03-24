@@ -14,7 +14,9 @@ function getFolderSortedList (folder, callback){
     var videoList = [];
 
     if (err) {
-      return console.error(err);
+      console.error(err);
+
+      return callback(err);
     }
 
     files = files.filter(function (file) {
