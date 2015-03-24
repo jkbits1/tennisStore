@@ -187,6 +187,8 @@
     res.redirect('/');
   }
 
+  app.use(express.favicon());
+
   //app.use(morgan('dev'));
   app.use(morgan('combined'));
   app.use(cookieParser());
