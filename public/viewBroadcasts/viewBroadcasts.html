@@ -1,0 +1,72 @@
+<!--<p>This is the partial for view 3.</p>-->
+<!--<p>-->
+  <!--Showing of 'interpolate' filter:-->
+  <!--{{ 'Current version is v%VERSION%.' | interpolate }}-->
+<!--</p>-->
+
+<div class="container">
+
+  <h1 class="title">Episode Guide <small>- List of Broadcasts </small></h1>
+  <!--({{fileName}})-->
+
+
+  <br>
+  <div class="row">
+    <!--<div class="col-md-3"><h3>Name:</h3></div>-->
+    <div class="col-md-3 programLabel"><strong>Name:</strong></div>
+    <div class="col-md-2 programName"><h3>{{fileName}}</h3></div>
+    <div class="col-md-7"></div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-md-3"><strong>Type:</strong></div>
+    <div class="col-md-2">TV Program</div>
+    <div class="col-md-7"></div>
+  </div>
+  <!--<div class="row">-->
+    <!--<div class="col-md-3"><strong>Name:</strong></div>-->
+    <!--<div class="col-md-2">{{fileName}}</div>-->
+    <!--<div class="col-md-7"></div>-->
+  <!--</div>-->
+  <div class="row">
+    <div class="col-md-3"><strong>First broadcast:</strong></div>
+    <div class="col-md-2">{{getFirstEpisodeDate()}}</div>
+    <div class="col-md-7"></div>
+  </div>
+  <div class="row">
+    <div class="col-md-3"><strong>Last broadcast:</strong></div>
+    <div class="col-md-2">{{getLastEpisodeDate()}}</div>
+    <div class="col-md-7"></div>
+  </div>
+  <div class="row">
+    <div class="col-md-3"><strong>Number of episodes:</strong></div>
+    <div class="col-md-2">{{getEpisodeCount()}}</div>
+    <div class="col-md-7"></div>
+  </div>
+
+  <br>
+  <p>
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam cursus dignissim dui a pretium. Integer eget tellus orci. Mauris fermentum aliquam quam sit amet iaculis. Praesent viverra urna elit, id lacinia ex rutrum nec. Curabitur euismod feugiat nisl, sit amet feugiat enim semper in. Fusce in magna turpis. Ut quis dui mi.
+  </p>
+  <br>
+
+  <div class="bs-example">
+    <table class="table">
+      <tbody>
+      <tr ng-repeat="dateInfo in fileDates">
+    <!--<span class="colHeadings">-->
+      <!--<span class="colYearHeading">
+      </span>-->
+        <td>{{dateInfo.year}}&nbsp;</td>
+      <td>{{dateInfo.month}}</td>
+    <!--</span>-->
+        <!--{{file.fileName}} - {{getDateAsString(file.date)}}-->
+
+        <!--<span class="colDay"></span>-->
+        <td>{{dateInfo.day}}</td>
+      </tbody>
+    </table>
+  </div>
+
+</div>
