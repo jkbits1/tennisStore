@@ -20,11 +20,7 @@ var view2Module = angular.module('myApp.view2', ['ngRoute'])
 }]);
 
 view2Module.factory('filenameService', function () {
-
-  //return function (){
-
   var t1 = "";
-
 
   return {
 
@@ -32,7 +28,6 @@ view2Module.factory('filenameService', function () {
     setUpScope: function($scope) {
 
       $scope.getDateAsString = this.getDateAsString;
-
       $scope.getProgramName = this.getProgramName($scope);
 
       $scope.getFirstEpisodeDate = this.getFirstEpisodeDate
@@ -49,18 +44,9 @@ view2Module.factory('filenameService', function () {
       var fileDate = new Date(date);
       return fileDate.toDateString();
     },
-    //getProgramName: function () {
-    //
-    //  if ($scope.files === undefined) {
-    //    return "";
-    //  }
-    //
-    //  return $scope.files[0].fileName;
-    //},
     getProgramName: function ($scope) {
 
       return function() {
-
         if ($scope.files === undefined || $scope.files.length === 0) {
           return "";
         }
@@ -85,20 +71,17 @@ view2Module.factory('filenameService', function () {
     getFirstEpisodeDate: function() {
 
         //if ($scope.files === undefined) {
-        if (this.files === undefined) {
-
+        if (this.files === undefined || this.files.length === 0) {
           return "";
         }
 
-        //return new Date($scope.files[0].date).toDateString();
         return new Date(this.files[0].date).toDateString();
     },
 
     getLastEpisodeDate: function($scope) {
 
       return function() {
-
-        if ($scope.files === undefined) {
+        if ($scope.files === undefined || $scope.files.length === 0) {
 
           return "";
         }
@@ -112,7 +95,7 @@ view2Module.factory('filenameService', function () {
     getEpisodeCount: function($scope) {
 
       return function() {
-        if ($scope.files === undefined) {
+        if ($scope.files === undefined || $scope.files.length === 0) {
 
           return 0;
         }
@@ -121,13 +104,6 @@ view2Module.factory('filenameService', function () {
       }
     }
   };
-
-  //var t1 = "";
-  //return function(x){
-  //    return "123";
-  //}
-  //}
-
 });
 
 view2Module.controller('View2Ctrl', ['$rootScope', '$scope', '$http', '$routeParams', 'filenameService', function($rootScope, $scope, $http, $routeParams, filenameService) {
