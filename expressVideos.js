@@ -98,6 +98,8 @@
     var lineCount = 0;
     var progInfoFound = false;
 
+    console.error('getDefaultEpisodesInfo - starting');
+
     function processLine(line) {
       function processPathInfo(pathInfo) {
         //var path = pathInfo.getPathInfo(line);
