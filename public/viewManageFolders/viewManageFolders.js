@@ -15,7 +15,7 @@ manageModule.config(['$routeProvider', function ($routeProvider) {
   })
 }]);
 
-manageModule.controller('manageFoldersCtrl', ['$rootScope', '$scope', '$http', function ($rootScope, $scope, $http){
+manageModule.controller('manageFoldersCtrl', ['$rootScope', '$scope', '$location', '$http', function ($rootScope, $scope, $location, $http){
 
   $scope.folders = []; //[{name: "f1"}, {name: "f2"}];
 
@@ -24,6 +24,19 @@ manageModule.controller('manageFoldersCtrl', ['$rootScope', '$scope', '$http', f
     name: '',
     path: ''
   };
+
+  // check if we are logged in
+  $http.get('/isLoggedIn')
+    .success(function (data, status, headers, config) {
+
+      if (data.loggedIn === undefined || data.loggedIn !== true) {
+        $location.path('/login');
+      }
+    })
+    .error(function (data, status, headers, config) {
+
+      var i = 0;
+    });
 
   //$http.get('http://localhost:3030/foldersDb')
   $http.get('/foldersDb')
