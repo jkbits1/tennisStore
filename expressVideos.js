@@ -27,6 +27,8 @@
   var pathInfo = require('./pathInfo');
   var seedDb = require('./seedDb');
 
+  console.error("dir:", __dirname);
+
   var app = express();
   // connect to db
   var progDetails = seedDb.setUpDb(seedDb.mainDbName);
