@@ -256,6 +256,9 @@
       user: req.user
     });
   });
+  app.get('/isLoggedIn', isLoggedIn, function (req, res) {
+    res.send({loggedIn: true});
+  });
   app.get('/manageFolders', isLoggedIn, function (req, res) {
 
     progDetails.find({}, function (err, docs) {
