@@ -5,23 +5,27 @@
 var fs = require('fs');
 var mkdirp = require('mkdirp');
 
-module.exports = function (folderName, fileOfFileNames) {
+module.exports = function (folderName, fileOfFileNames, cb) {
   if (folderName === undefined || folderName.length === 0) {
-    return console.error("no folder name");
+    console.error("no folder name");
+    return cb("no folder name");
   }
 
   if (fileOfFileNames === undefined || fileOfFileNames.length === 0) {
-    return console.error("no file name");
+    console.error("no file name");
+    return cb("no file name");
   }
 
   fs.open(fileOfFileNames, 'r', function (err, fd) {
     if (err) {
-      return console.error("failed to open file");
+      console.error("failed to open file");
+      return cb("failed to open file");
     }
 
     mkdirp(folderName, function (err) {
       if (err) {
-        return console.error(err);
+        console.error(err);
+        return cb("failed to create folder");
       }
 
       var readStream = fs.createReadStream('', {fd: fd});
@@ -39,11 +43,12 @@ module.exports = function (folderName, fileOfFileNames) {
 
           //console.error(folderName);
           //console.error(listFilename);
-          console.error();
+          console.error(newFileName);
 
           fs.open(newFileName, 'w', function (err, fd) {
             if (err) {
-              return console.error("could not create file:", newFileName);
+              console.error("could not create file:", newFileName);
+              return cb("could not create file: " + newFileName);
             }
 
             console.error("created file:", newFileName);
@@ -52,6 +57,8 @@ module.exports = function (folderName, fileOfFileNames) {
       });
       readStream.on('end', function () {
         console.error("all items read");
+
+        return cb(null, "all items read");
       });
     });
   });

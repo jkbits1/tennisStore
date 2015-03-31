@@ -27,6 +27,8 @@
   var pathInfo = require('./pathInfo');
   var seedDb = require('./seedDb');
 
+  var folderCreator = require('./folderCreator');
+
   console.error("dir:", __dirname);
 
   var app = express();
@@ -271,9 +273,18 @@
       }));
       res.end();
     });
-
-
   });
+  app.get('/createTestFolder/:folderName', isLoggedIn, function (req, res) {
+    folderCreator(req.params.folderName, "listFileName.txt", function (err){
+      if (err) {
+        console.error(err);
+        return res.send(401);
+      }
+
+      res.send({createdFolder: true});
+    });
+  });
+
   app.post('/addPath', isLoggedIn, function (req, res) {
 
     var id = +(req.body.id);
