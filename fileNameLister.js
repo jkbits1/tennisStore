@@ -14,7 +14,7 @@ module.exports = function (folder, listFileName) {
   }
 
   //NOTE: this will write over an existing file
-  fs.open('listFileName', 'w+', function (err, fd) {
+  fs.open(listFileName, 'w+', function (err, fd) {
     if (err) {
       return console.error("failed to create or access output file");
     }
