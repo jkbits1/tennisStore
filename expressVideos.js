@@ -275,7 +275,10 @@
     });
   });
   app.get('/createTestFolder/:folderName', isLoggedIn, function (req, res) {
-    folderCreator(req.params.folderName, "listFileName.txt", function (err){
+    folderCreator(req.params.folderName,
+      //"listFileName.txt"
+      "listFileName2.txt"
+      , function (err){
       if (err) {
         console.error(err);
         return res.send(401);
