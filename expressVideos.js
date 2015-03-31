@@ -274,10 +274,10 @@
       res.end();
     });
   });
-  app.get('/createTestFolder/:folderName', isLoggedIn, function (req, res) {
+  app.get('/createTestFolder/:folderName/:listName', isLoggedIn, function (req, res) {
     folderCreator(req.params.folderName,
       //"listFileName.txt"
-      "listFileName2.txt"
+      req.params.listName
       , function (err){
       if (err) {
         console.error(err);
