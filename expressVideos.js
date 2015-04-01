@@ -289,7 +289,12 @@
     });
   });
   app.get('/testFolderCount/:suffix', function (req, res) {
-    folderCounter('test' + req.params.suffix, function(err, count){
+    var testFolderName = 'test';
+
+    if (req.params.suffix !== '0' ) {
+      testFolderName += req.params.suffix;
+    }
+    folderCounter(testFolderName, function(err, count){
       if (err) {
         console.error(err);
         return res.send(401);
