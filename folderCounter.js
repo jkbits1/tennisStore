@@ -12,6 +12,6 @@ module.exports = function (folderName, callback) {
       return callback(err);
     }
 
-    callback(files.length);
+    callback(null, files.length);
   });
 };
