@@ -28,6 +28,7 @@
   var seedDb = require('./seedDb');
 
   var folderCreator = require('./folderCreator');
+  var folderCounter = require('./folderCounter');
 
   console.error("dir:", __dirname);
 
@@ -284,8 +285,18 @@
         return res.send(401);
       }
 
-      res.send({createdFolder: true});
+      res.send({ createdFolder: true });
     });
+  });
+  app.get('/testFolderCount/:suffix', function (req, res) {
+    folderCounter('test' + req.params.suffix, function(err, count){
+      if (err) {
+        console.error(err);
+        return res.send(401);
+      }
+
+      res.send({ folderCount: count });
+    })
   });
 
   app.post('/addPath', isLoggedIn, function (req, res) {
