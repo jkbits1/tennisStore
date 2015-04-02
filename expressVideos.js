@@ -211,7 +211,13 @@
   //       view engines sometime.
   //app.set('view engine', jade);
 
-  app.use(session({secret: 'video manager'}));
+  //NOTE: added resave option to resolve deprecated warning.
+  //      Need to check that false is valid for all scenarios
+  app.use(session(
+    {
+      secret: 'video manager',
+      resave: false
+    }));
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(flash());
