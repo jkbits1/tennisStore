@@ -199,7 +199,10 @@
   //app.use(morgan('dev'));
   app.use(morgan('combined'));
   app.use(cookieParser());
-  app.use(bodyParser());
+
+  // change to use specific, non-deprecated, options
+  //app.use(bodyParser());
+  app.use(bodyParser.urlencoded({ extended: false }));
 
   app.set('view engine', 'ejs');
 
