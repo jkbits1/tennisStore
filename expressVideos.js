@@ -203,6 +203,7 @@
   // change to use specific, non-deprecated, options
   //app.use(bodyParser());
   app.use(bodyParser.urlencoded({ extended: false }));
+  app.use(bodyParser.json());
 
   app.set('view engine', 'ejs');
 
