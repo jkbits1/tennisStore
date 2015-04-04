@@ -1,3 +1,4 @@
+<!--NOTE: <a data-target> specifies id defined in index.html -->
 <li ng-if=loggedInUser>
   <a href="#/manageFolders">Welcome {{loggedInUser}}</a>
 </li>
@@ -5,5 +6,6 @@
   <a href ng-click='logout()'>Logout</a>
 </li>
 <li ng-if=!loggedInUser>
-  <a href="#/login">Login</a>
+  <!--NOTE: <a data-target> specifies id defined in index.html -->
+  <a href="#/login" data-toggle="collapse" data-target="#navbar">Login</a>
 </li>
