@@ -6140,6 +6140,32 @@ button.close {
     }
 }
 
+/*jk change*/
+@media (min-width: 333px) {
+
+    /*jk change*/
+    .col-sm-2, .col-sm-3, .col-sm-10 {
+        /*display: inline !important;*/
+        float: left;
+        float: left;
+    }
+
+    /*jk change*/
+    .col-sm-10 {
+        width: 83.33333333%
+    }
+
+    /*jk change*/
+    .col-sm-3 {
+        width: 25%
+    }
+
+    /*jk change*/
+    .col-sm-2 {
+        width: 16.66666667%
+    }
+}
+
 @media (min-width: 768px) and (max-width:991px) {
     .visible-sm {
         display:block !important
