@@ -670,7 +670,8 @@ button, a, button:focus, a:focus{
 /*.slideshow .slide .title{*/
 .title{
 	color: #da5d1a;
-	font-size: 4em;
+	/*font-size: 4em;*/
+	font-size: 3.2em;
   /*jk change*/
   /*margin: 0 auto 50px;*/
   max-width: 90%;
@@ -1757,6 +1758,8 @@ button, a, button:focus, a:focus{
     width: 70px;
   }
 }
+
+/*jk change*/
 @media (max-width: 599px){
   #content{
     padding-top: 70px;
@@ -1764,8 +1767,12 @@ button, a, button:focus, a:focus{
   .container{
     padding: 0 20px 0 20px;
   }
+  /*jk change*/
   .nav>li>a {
     padding: 10px 7px;
+    /*jk change*/
+    /*opacity: 0.8;*/
+    background-color: rgba(255, 255, 255, 0.8);
   }
   .navbar-nav{
     margin-top: 0;
