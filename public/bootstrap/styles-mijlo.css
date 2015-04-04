@@ -668,14 +668,27 @@ button, a, button:focus, a:focus{
 
 /*jk change*/
 /*.slideshow .slide .title{*/
-.title{
-	color: #da5d1a;
-	/*font-size: 4em;*/
-	font-size: 3.2em;
-  /*jk change*/
-  /*margin: 0 auto 50px;*/
-  max-width: 90%;
+@media (min-width: 600px) {
+  .title {
+    color: #da5d1a;
+    /*font-size: 4em;*/
+    font-size: 3.2em;
+    /*jk change*/
+    /*margin: 0 auto 50px;*/
+    max-width: 90%;
+  }
 }
+
+/*jk change*/
+@media (max-width: 599px) {
+  /*jk change*/
+  .title {
+    color: #da5d1a;
+    font-size: 2.4em;
+    max-width: 90%;
+  }
+}
+
 .slideshow .slide .tagline{
 	font-family: 'Avenir Heavy';
 	color: #fff;
