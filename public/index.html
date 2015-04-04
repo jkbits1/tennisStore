@@ -25,6 +25,12 @@
   <link ng-href="{{bootstrap_external_css}}" rel="stylesheet">
   <link ng-href="{{bootstrap_docs_css}}" rel="stylesheet">
 
+
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script><!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -56,12 +62,22 @@
     <div class="sidebar-nav">
       <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container-fluid">
+        <!--<div class="container">-->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#/viewBroadcasts">Episode Guide</a>
+          </div>
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="menu nav navbar-nav">
               <li><a href="#/view1">Others</a></li>
               <li><a href="#/view2/{{progId}}">Alt List</a></li>
-              <li><a href="#/viewBroadcasts">Episode List</a></li>
-              <li><a href="#/chooseProgramme">Choose Programme</a></li>
+              <li class="active"><a href="#/viewBroadcasts" data-toggle="collapse" data-target="#navbar">Episode List</a></li>
+              <li><a href="#/chooseProgramme" data-toggle="collapse" data-target="#navbar">Choose Programme</a></li>
             </ul>
             <ul admin-login class="menu nav navbar-nav navbar-right"></ul>
             <!--
