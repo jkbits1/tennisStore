@@ -147,9 +147,11 @@
 
   function createTestFolder (suffix){
     var testFolderName = 'test';
+    var suffixText = "";
 
     if (suffix !== 0) {
-      testFolderName += suffix.toString();
+      suffixText = suffix.toString();
+      testFolderName += suffixText;
     }
 
     folderCounter(testFolderName, function(err, count){
