@@ -18,7 +18,7 @@ module.exports = function (folderName, fileOfFileNames, cb) {
 
   fs.open(fileOfFileNames, 'r', function (err, fd) {
     if (err) {
-      console.error("failed to open file");
+      console.error("failed to open file:", err);
       return cb("failed to open file");
     }
 
