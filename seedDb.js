@@ -7,6 +7,9 @@
   var mongoose = require('mongoose');
   var pathInfo = require('./pathInfo');
 
+  var folderCreator = require('./folderCreator');
+  var folderCounter = require('./folderCounter');
+
   var mainDbName = undefined;
   var testDbName = undefined;
   var appPort = 3030;
@@ -53,6 +56,7 @@
   module.exports = {
     setUpDb: setUpDb,
     createDbSeedsFromFile: createDbSeedsFromFile,
+    createTestFolders: createTestFolders,
     mainDbName: mainDbName,
     testDbName: testDbName,
     appPort: appPort
@@ -134,5 +138,35 @@
     }
 
     pathInfo.queryInfoFile(processLine, end);
+  }
+
+  function createTestFolders (){
+    createTestFolder(0);
+    createTestFolder(2);
+  }
+
+  function createTestFolder (suffix){
+    var testFolderName = 'test';
+
+    if (suffix !== 0) {
+      testFolderName += suffix.toString();
+    }
+
+    folderCounter(testFolderName, function(err, count){
+      if (err) {
+        console.error(err);
+        console.error("creating folder");
+
+        folderCreator(testFolderName,
+          "listFileName" + suffix + ".txt"
+          , function (err) {
+            if (err) {
+              console.error(err);
+            }
+        });
+      }
+
+      //console.error("count:", count);
+    })
   }
 })();
