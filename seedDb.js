@@ -160,7 +160,7 @@
         console.error("creating folder");
 
         folderCreator(testFolderName,
-          "listFileName" + suffix + ".txt"
+          "listFileName" + suffixText + ".txt"
           , function (err) {
             if (err) {
               console.error(err);
