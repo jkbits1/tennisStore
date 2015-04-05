@@ -36,6 +36,8 @@
   // connect to db
   var progDetails = seedDb.setUpDb(seedDb.mainDbName);
 
+  seedDb.createTestFolders();
+
   function findUser (username, fn) {
     fn(null, user)
   }
