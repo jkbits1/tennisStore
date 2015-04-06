@@ -12,7 +12,13 @@
 .programName {
     /*vertical-align: baseline;*/
     vertical-align: text-bottom;
-    margin-bottom: -6px;
+
+    /*NOTE: no longer using h3 wrapper, so
+            making adjustments here*/
+    /*margin-bottom: -6px;*/
+    margin-bottom: 7px;
+
+    font-size: 24px;
 }
 
 body {
