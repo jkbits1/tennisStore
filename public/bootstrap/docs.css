@@ -5,8 +5,18 @@
  * details, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-.programLabel {
-    vertical-align: baseline;
+@media (min-width: 371px) {
+    .programLabel {
+        vertical-align: baseline;
+    }
+}
+
+/*jk change*/
+@media (max-width: 370px) {
+    .programLabel {
+        vertical-align: baseline;
+        width: 90px;
+    }
 }
 
 .programName {
@@ -19,6 +29,8 @@
     margin-bottom: 7px;
 
     font-size: 24px;
+
+    top: -5px;
 }
 
 body {
