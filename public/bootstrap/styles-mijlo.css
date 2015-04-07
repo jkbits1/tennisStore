@@ -672,10 +672,15 @@ button, a, button:focus, a:focus{
   .title {
     color: #da5d1a;
     /*font-size: 4em;*/
-    font-size: 3.2em;
+    /*font-size: 3.2em;*/
+    font-size: 2.7em;
     /*jk change*/
     /*margin: 0 auto 50px;*/
     max-width: 90%;
+
+    /*jk change*/
+    margin-left: -3px;
+    margin-top: 8px;
   }
 }
 

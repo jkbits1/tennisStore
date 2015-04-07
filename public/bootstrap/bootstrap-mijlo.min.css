@@ -555,9 +555,13 @@ a.bg-danger:hover {
     border-bottom: 1px solid #eee
 }
 
+/*jk change*/
 ul,ol {
     margin-top: 0;
-    margin-bottom: 10px
+    margin-bottom: 10px;
+
+    /*jk change*/
+    padding-left: 21px;
 }
 
 ul ul,ol ul,ul ol,ol ol {
