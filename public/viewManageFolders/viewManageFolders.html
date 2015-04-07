@@ -1,9 +1,9 @@
 <div class="container">
-  <h1 class="title">Episode Guide <small>- Manage Folders</small></h1>
+  <h1 class="title">Manage Programmes</h1>
   <!--<hr>-->
   <br>
 
-  <h3 class="subhead">Existing Folders</h3>
+  <h3 class="subhead">Existing Programmes</h3>
   <ul>
     <li ng-repeat="folder in folders">
       {{folder.name}}
@@ -13,7 +13,7 @@
 
   <div class="row">
     <div class="col-sm-5">
-      <h3 class="subhead">Add New Folder</h3>
+      <h3 class="subhead">Add New Programme</h3>
       <!--<h2 class="panel-title">Add New Folder</h2>-->
       <form role="form" id="addFolder" ng-submit="addFolder(folderInfo)">
         <div class="form-group">
@@ -30,7 +30,7 @@
         </div>
 
         <!--<input type="submit" class="btn btn-success">-->
-        <input type="submit" class="btn btn-primary">
+        <input type="submit" class="btn btn-primary" value="Add Programme">
       </form>
     </div>
   </div>
