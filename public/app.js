@@ -22,9 +22,32 @@ myApp
   }])
   .directive('adminLogin', [function (){
   return {
-    controller: function ($scope, $cookies) {
+    restrict: 'A',
+    transclude: true,
+    controller: function ($rootScope, $scope, $http, $cookies) {
+
+      //$http.get('/isLoggedIn')
+      //  .success(function (data, status, headers, config) {
+      //
+      //    if (data.loggedIn === undefined || data.loggedIn !== true) {
+      //      //$scope.$apply(function (){
+      //      $scope.loggedInUser = false;
+      //      $rootScope.loggedInUser = undefined;
+      //      delete $cookies["loggedInUser"];
+      //      //});
+      //      //$location.path('/login');
+      //    }
+      //  })
+      //  .error(function (data, status, headers, config) {
+      //
+      //    var i = 0;
+      //  });
+
+
       if ($cookies.loggedInUser != undefined) {
         $scope.loggedInUser = $cookies.loggedInUser;
+        //$root.loggedInUser = $cookies.loggedInUser;
+        $rootScope.loggedInUser = $cookies.loggedInUser;
       }
     },
     templateUrl: 'directives/admin-login.html'
@@ -32,7 +55,7 @@ myApp
   }]);
 
 myApp
-  .controller('indexCtrl', ['$scope', '$http', '$sce', '$location', 'AuthService', '$cookies', function($scope, $http, $sce, $location, AuthService, $cookies) {
+  .controller('indexCtrl', ['$rootScope', '$scope', '$http', '$sce', '$location', 'AuthService', '$cookies', function($rootScope, $scope, $http, $sce, $location, AuthService, $cookies) {
 
     $scope.logout = function () {
 
@@ -42,6 +65,7 @@ myApp
 
           // my additions
           $scope.loggedInUser = false;
+          $rootScope.loggedInUser = undefined;
           //$cookies.loggedInUser = undefined;
           delete $cookies["loggedInUser"];
         }, function (err) {

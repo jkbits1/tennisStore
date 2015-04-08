@@ -15,7 +15,7 @@ manageModule.config(['$routeProvider', function ($routeProvider) {
   })
 }]);
 
-manageModule.controller('manageFoldersCtrl', ['$rootScope', '$scope', '$location', '$http', function ($rootScope, $scope, $location, $http){
+manageModule.controller('manageFoldersCtrl', ['$rootScope', '$scope', '$location', '$http', '$cookies', function ($rootScope, $scope, $location, $http, $cookies){
 
   $scope.folders = []; //[{name: "f1"}, {name: "f2"}];
 
@@ -30,8 +30,15 @@ manageModule.controller('manageFoldersCtrl', ['$rootScope', '$scope', '$location
     .success(function (data, status, headers, config) {
 
       if (data.loggedIn === undefined || data.loggedIn !== true) {
+        //$scope.$apply(function (){
+        $rootScope.loggedInUser = undefined;
+          delete $cookies["loggedInUser"];
+        //});
         $location.path('/login');
       }
+      //else {
+      //  $location.path('/manageFolders');
+      //}
     })
     .error(function (data, status, headers, config) {
 

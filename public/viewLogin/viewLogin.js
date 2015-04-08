@@ -13,7 +13,7 @@ loginModule.config(['$routeProvider', function($routeProvider){
   });
 }]);
 
-loginModule.controller('LoginCtrl', ['$scope', '$location', '$window', '$cookies', 'AuthService', '$log', function ($scope, $location, $window, $cookies, AuthService, $log) {
+loginModule.controller('LoginCtrl', ['$rootScope', '$scope', '$location', '$window', '$cookies', 'AuthService', '$log', function ($rootScope, $scope, $location, $window, $cookies, AuthService, $log) {
   $scope.credentials = {
     email: '',
     password: ''
@@ -22,6 +22,8 @@ loginModule.controller('LoginCtrl', ['$scope', '$location', '$window', '$cookies
   $scope.login = function (credentials) {
     AuthService.login(credentials).then(function (res, err) {
         $cookies.loggedInUser = res.data;
+
+        $rootScope.loggedInUser = $cookies.loggedInUser;
 
         //NOTE: relocate to app-relative href
         //$location.path('/admin/pages');
