@@ -188,6 +188,10 @@
     });
   }
 
+  function redirectToAppHome (req, res) {
+    res.redirect('/app');
+  }
+
   function isLoggedIn (req, res, next) {
     if (req.isAuthenticated()){
       return next();
@@ -255,7 +259,8 @@
     res.header("Access-Control-Allow-Headers", "Origin, x-Requested-With, Content-Type, Accept");
     next();
   });
-  app.get('/', getDefaultEpisodesInfo);
+  //app.get('/', getDefaultEpisodesInfo);
+  app.get('/', redirectToAppHome);
 
   app.get('/account', function (req, res) {
     res.render('account.ejs');
@@ -387,9 +392,9 @@
   //      /:progId route. Reasons not fully
   //      understood yet.
   //app.get('/chooseProgramme/', function (req, res) {
-  app.get('/app/', function (req, res) {
-    res.sendfile('/public/index.html');
-  });
+
+  //NOTE: think this is always handled by app.use('/'...
+  //app.get('/app/', redirectToAppHome);
 
   app.get('/:progId', getEpisodesInfo);
 
