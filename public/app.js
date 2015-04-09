@@ -22,7 +22,7 @@ myApp
   }]);
 
 myApp
-  .controller('indexCtrl', ['$rootScope', '$scope', '$http', '$sce', '$location', 'AuthService', '$cookies', function($rootScope, $scope, $http, $sce, $location, AuthService, $cookies) {
+  .controller('indexCtrl', ['$rootScope', '$scope', '$http', '$sce', '$location', 'AuthService', '$cookies', 'LoggedInUser', function($rootScope, $scope, $http, $sce, $location, AuthService, $cookies, LoggedInUser) {
 
     $scope.logout = function () {
 
@@ -33,6 +33,7 @@ myApp
           // my additions
           $scope.loggedInUser = false;
           $rootScope.loggedInUser = undefined;
+          LoggedInUser.loggedInUser = undefined;
           //$cookies.loggedInUser = undefined;
           delete $cookies["loggedInUser"];
         }, function (err) {

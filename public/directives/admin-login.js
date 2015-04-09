@@ -8,7 +8,7 @@ myApp.directive('adminLogin', [function (){
   return {
     restrict: 'A',
     transclude: true,
-    controller: function ($rootScope, $scope, $http, $cookies) {
+    controller: function ($rootScope, $scope, $http, $cookies, LoggedInUser) {
 
       //$http.get('/isLoggedIn')
       //  .success(function (data, status, headers, config) {
@@ -32,6 +32,7 @@ myApp.directive('adminLogin', [function (){
         $scope.loggedInUser = $cookies.loggedInUser;
         //$root.loggedInUser = $cookies.loggedInUser;
         $rootScope.loggedInUser = $cookies.loggedInUser;
+        LoggedInUser.loggedInUser = $cookies.loggedInUser;
       }
     },
     templateUrl: 'directives/admin-login.html'
