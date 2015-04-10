@@ -24,8 +24,6 @@ myApp
 myApp
   .controller('indexCtrl', ['$rootScope', '$scope', '$http', '$sce', '$location', 'AuthService', '$cookies', 'LoggedInUser', function($rootScope, $scope, $http, $sce, $location, AuthService, $cookies, LoggedInUser) {
 
-    //$scope.loggedInUser = LoggedInUser.loggedInUser;
-
     $scope.logout = function () {
 
       AuthService.logout().then(
@@ -33,8 +31,6 @@ myApp
           $location.path('/chooseProgramme');
 
           // my additions
-          //$scope.loggedInUser = false;
-          //$rootScope.loggedInUser = undefined;
           LoggedInUser.loggedInUser = undefined;
           //$cookies.loggedInUser = undefined;
           delete $cookies["loggedInUser"];
