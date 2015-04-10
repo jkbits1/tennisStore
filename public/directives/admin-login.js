@@ -10,7 +10,7 @@ myApp.directive('adminLogin', [function (){
     transclude: true,
     controller: function ($rootScope, $scope, $http, $cookies, LoggedInUser) {
 
-      $scope.loggedInUser = LoggedInUser.loggedInUser;
+      //$scope.loggedInUser = LoggedInUser.loggedInUser;
       $scope.status = LoggedInUser;
 
       console.log("status:", $scope.status);
@@ -34,9 +34,9 @@ myApp.directive('adminLogin', [function (){
 
 
       if ($cookies.loggedInUser != undefined) {
-        $scope.loggedInUser = $cookies.loggedInUser;
+        //$scope.loggedInUser = $cookies.loggedInUser;
         //$root.loggedInUser = $cookies.loggedInUser;
-        $rootScope.loggedInUser = $cookies.loggedInUser;
+        //$rootScope.loggedInUser = $cookies.loggedInUser;
         LoggedInUser.loggedInUser = $cookies.loggedInUser;
       }
     },

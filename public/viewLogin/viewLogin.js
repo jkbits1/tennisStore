@@ -15,7 +15,7 @@ loginModule.config(['$routeProvider', function($routeProvider){
 
 loginModule.controller('LoginCtrl', ['$rootScope', '$scope', '$location', '$window', '$cookies', 'AuthService', '$log', 'LoggedInUser', function ($rootScope, $scope, $location, $window, $cookies, AuthService, $log, LoggedInUser) {
 
-  $scope.loggedInUser = LoggedInUser.loggedInUser;
+  //$scope.loggedInUser = LoggedInUser.loggedInUser;
 
   $scope.credentials = {
     email: '',
@@ -26,17 +26,18 @@ loginModule.controller('LoginCtrl', ['$rootScope', '$scope', '$location', '$wind
     AuthService.login(credentials).then(function (res, err) {
         $cookies.loggedInUser = res.data;
 
-        $scope.loggedInUser = $cookies.loggedInUser;
-        $rootScope.loggedInUser = $cookies.loggedInUser;
+        //$scope.loggedInUser = $cookies.loggedInUser;
+        //$rootScope.loggedInUser = $cookies.loggedInUser;
         LoggedInUser.loggedInUser = $cookies.loggedInUser;
 
-        //NOTE: relocate to app-relative href
+        //NOTE: tests of relocating to app-relative href
         //$location.path('/admin/pages');
         //$location.path('/manageFolders');
         //$location.path('/chooseProgramme');
 
-        //NOTE: relocate to non-app href
+        //NOTE: test of relocating to non-app href
         //$window.location.href = 'http://localhost:3030/manageFolders';
+
         $location.path('/manageFolders');
       },
       function (err) {

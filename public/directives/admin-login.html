@@ -1,6 +1,6 @@
 <!--NOTE: <a data-target> specifies id defined in index.html -->
 <li ng-if=status.loggedInUser>
-  <a href="#/manageFolders">Welcome {{$root.loggedInUser}}</a>
+  <a href="#/manageFolders">Welcome {{status.loggedInUser}}</a>
 </li>
 <li ng-if=status.loggedInUser>
   <a href ng-click='logout()'>Logout</a>
