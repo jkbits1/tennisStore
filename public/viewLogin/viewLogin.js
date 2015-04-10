@@ -14,6 +14,9 @@ loginModule.config(['$routeProvider', function($routeProvider){
 }]);
 
 loginModule.controller('LoginCtrl', ['$rootScope', '$scope', '$location', '$window', '$cookies', 'AuthService', '$log', 'LoggedInUser', function ($rootScope, $scope, $location, $window, $cookies, AuthService, $log, LoggedInUser) {
+
+  $scope.loggedInUser = LoggedInUser.loggedInUser;
+
   $scope.credentials = {
     email: '',
     password: ''
@@ -23,6 +26,7 @@ loginModule.controller('LoginCtrl', ['$rootScope', '$scope', '$location', '$wind
     AuthService.login(credentials).then(function (res, err) {
         $cookies.loggedInUser = res.data;
 
+        $scope.loggedInUser = $cookies.loggedInUser;
         $rootScope.loggedInUser = $cookies.loggedInUser;
         LoggedInUser.loggedInUser = $cookies.loggedInUser;
 

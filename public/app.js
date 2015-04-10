@@ -24,6 +24,8 @@ myApp
 myApp
   .controller('indexCtrl', ['$rootScope', '$scope', '$http', '$sce', '$location', 'AuthService', '$cookies', 'LoggedInUser', function($rootScope, $scope, $http, $sce, $location, AuthService, $cookies, LoggedInUser) {
 
+    $scope.loggedInUser = LoggedInUser.loggedInUser;
+
     $scope.logout = function () {
 
       AuthService.logout().then(

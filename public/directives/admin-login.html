@@ -1,11 +1,11 @@
 <!--NOTE: <a data-target> specifies id defined in index.html -->
-<li ng-if="$root.loggedInUser">
+<li ng-if=status.loggedInUser>
   <a href="#/manageFolders">Welcome {{$root.loggedInUser}}</a>
 </li>
-<li ng-if="$root.loggedInUser">
+<li ng-if=status.loggedInUser>
   <a href ng-click='logout()'>Logout</a>
 </li>
-<li ng-if="!$root.loggedInUser">
+<li ng-if=!status.loggedInUser>
   <!--NOTE: <a data-target> specifies id defined in index.html -->
   <a href="#/login" class="visible-xs" data-toggle="collapse" data-target="#navbar">Login</a>
   <a href="#/login" class="hidden-xs">Login</a>

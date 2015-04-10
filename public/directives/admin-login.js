@@ -10,6 +10,11 @@ myApp.directive('adminLogin', [function (){
     transclude: true,
     controller: function ($rootScope, $scope, $http, $cookies, LoggedInUser) {
 
+      $scope.loggedInUser = LoggedInUser.loggedInUser;
+      $scope.status = LoggedInUser;
+
+      console.log("status:", $scope.status);
+
       //$http.get('/isLoggedIn')
       //  .success(function (data, status, headers, config) {
       //
