@@ -10,6 +10,6 @@ info.db
 cryptTest.js
 runTestModule.js
 seedDbOld.js
-public
 config/database.js
 spec/support/
+public
