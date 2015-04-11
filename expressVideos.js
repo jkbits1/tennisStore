@@ -328,13 +328,15 @@
     var id = +(req.body.id);
     var path = req.body.path;
     var name = req.body.name;
+    var summary = req.body.summary;
 
     console.error("id:", id);
     console.error("name:", name);
     console.error("path:", path);
+    console.error("summary:", summary);
 
     //progDetails.insert({id: id, name: name, path: path}, function(err, result){
-    progDetails.create({id: id, name: name, path: path}, function(err, result){
+    progDetails.create({id: id, name: name, path: path, summary: summary}, function(err, result){
       if (err) {
         console.error("couldn't add path");
       }
