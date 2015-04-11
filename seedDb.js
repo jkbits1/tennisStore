@@ -68,7 +68,7 @@
       var modelName = 'prog';
       var schema = new mongoose.Schema({
         //progId:
-        id: 'number', path: 'string', name: 'string'
+        id: 'number', path: 'string', name: 'string', summary: 'string'
       });
 
       return mongoose.model(modelName, schema);
