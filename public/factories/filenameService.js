@@ -42,11 +42,14 @@ view2Module.factory('filenameService', function () {
       };
     },
     getProgrammeSummary: function ($scope) {
-      if ($scope.files === undefined || $scope.files.length === 0) {
-        return "";
-      }
 
-      return $scope.files[0].summary;
+      return function () {
+        if ($scope.summary === undefined || $scope.summary === 0) {
+          return "";
+        }
+
+        return $scope.summary;
+      };
     },
 
     // NOTE: both patterns below work equally well (for all service fns), i) using a closure to allow use of scope, and ii) simply using this, relying on that being scope. I prefer the closure as more readable, possibly future-proof but is perhaps slightly less efficient.

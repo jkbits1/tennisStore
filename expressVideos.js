@@ -92,6 +92,7 @@
       console.error('folders db - db responded');
 
       if (err) {
+        console.error("getFoldersFromDb", err);
         return res.send(401, "folders not found");
       }
 
@@ -122,6 +123,11 @@
       if (lineCount === 1) {
         progInfoFound = true;
         getFolderList(pathInfo._doc.path, function (err, list) {
+          if (err) {
+            console.error("getDefaultEpisodesInfo", err);
+            res.redirect('/');
+          }
+
           res.send({
             files: list
           });
@@ -153,6 +159,25 @@
     });
   }
 
+  function getProgrammeDetails (req, res){
+    var progId = +(req.params.progId);
+
+    var progName = "";
+    var progSummary = "";
+
+    progDetails.find({id: progId}, function (err, docs) {
+      if (err) {
+        console.error("getProgrammeDetails", err);
+        //res.redirect('/');
+        res.send({info: "details not found"});
+      }
+
+      res.send(docs);
+    });
+
+    //res.send({programmeName: progName, programmeSummary: progSummary});
+  }
+
   function getEpisodesInfo (req, res) {
     var lineCount = 0;
     var progId = +(req.params.progId);
@@ -178,6 +203,7 @@
 
     progDetails.find({}, function (err, docs) {
       if (err) {
+        console.error("getEpisodesInfo", err);
         return res.redirect('/');
       }
       docs.forEach(processPathInfo);
@@ -286,6 +312,11 @@
   app.get('/manageFolders', isLoggedIn, function (req, res) {
 
     progDetails.find({}, function (err, docs) {
+      if (err) {
+        console.error("manageFolders", err);
+        res.redirect('/');
+      }
+
       //res.send(docs);
       res.write(templateFn({ user: req.user,
         //folders: [{name: 'one', value: 1}, {name: 'two', value: 2}]
@@ -374,7 +405,7 @@
 
         req.logIn(user, function (err) {
           if (err) {
-            console.error("failed login 2");
+            console.error("failed login 2", err);
             return next(err);
           }
 
@@ -399,6 +430,7 @@
   //app.get('/app/', redirectToAppHome);
 
   app.get('/:progId', getEpisodesInfo);
+  app.get('/progDetails/:progId', getProgrammeDetails);
 
   //NOTE: temporary handling of keep-alive request
   app.get('/favicon.ico', function (req, res) {

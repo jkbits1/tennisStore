@@ -36,14 +36,29 @@ angular.module('myApp.viewBroadcasts', ['ngRoute'])
 
 viewBroadcastsModule.controller('ViewBroadcastsCtrl', ['$rootScope', '$scope', '$http', '$cookies', 'filenameService', function($rootScope, $scope, $http, $cookies, filenameService) {
 
-  var progIdUriSegment = "";
+  var progIdUriSegment = "/";
+  var progDetailsUriSegment = "/progDetails/";
 
   if ($rootScope.progId !== undefined) {
-    progIdUriSegment = "/" + $rootScope.progId;
+    progIdUriSegment += $rootScope.progId;
+    progDetailsUriSegment += $rootScope.progId;
   }
   else if ($cookies.selectedProgramme !== undefined) {
-    progIdUriSegment = "/" + $cookies.selectedProgramme;
+    progIdUriSegment += $cookies.selectedProgramme;
+    progDetailsUriSegment += $cookies.selectedProgramme;
   }
+
+  $http.get(progDetailsUriSegment)
+    .success(function (data, status, headers, config) {
+      console.log(data);
+      if (data[0] !== undefined || data.length !== 0)   {
+        $scope.summary = data[0].summary;
+      }
+    })
+    .error(function (data, status, headers, config){
+
+    });
+
 
   //$http.get('http://localhost:3030' + progIdUriSegment)
   $http.get('' + progIdUriSegment)
@@ -77,7 +92,6 @@ viewBroadcastsModule.controller('ViewBroadcastsCtrl', ['$rootScope', '$scope', '
           var monthInfo = "";
 
           if (monthYears[year + month] === undefined) {
-
             monthYears[year + month] = 1;
 
             //monthInfo = year + "&nbsp;&nbsp;&nbsp;&nbsp;" + month;
@@ -102,62 +116,14 @@ viewBroadcastsModule.controller('ViewBroadcastsCtrl', ['$rootScope', '$scope', '
 
         //var parser = new fileParser($scope.files[0].fileName);
 
-        $scope.fileName = $scope.getProgramName();
+        //$scope.fileName = $scope.getProgramName();
         //$scope.fileDate = $scope.files[0].date;
+
 
       }).error(function(data, status, headers, config) {
 
       });
 
     filenameService.setUpScope($scope);
-
-    //$scope.getDateAsString = function(date) {
-    //
-    //  var fileDate = new Date(date);
-    //
-    //  return fileDate.toDateString();
-    //};
-    //
-    //$scope.getProgramName = function() {
-    //
-    //  if ($scope.files === undefined) {
-    //
-    //    return "";
-    //  }
-    //
-    //  return $scope.files[0].fileName;
-    //};
-    //
-    //$scope.getFirstEpisodeDate = function() {
-    //
-    //  if ($scope.files === undefined) {
-    //
-    //    return "";
-    //  }
-    //
-    //  return new Date($scope.files[0].date).toDateString();
-    //};
-    //
-    //$scope.getLastEpisodeDate = function() {
-    //
-    //  if ($scope.files === undefined) {
-    //
-    //    return "";
-    //  }
-    //
-    //  var lastEpisodeIndex = $scope.files.length - 1;
-    //
-    //  return new Date($scope.files[lastEpisodeIndex].date).toDateString();
-    //};
-    //
-    //$scope.getEpisodeCount = function() {
-    //
-    //  if ($scope.files === undefined) {
-    //
-    //    return 0;
-    //  }
-    //
-    //  return $scope.files.length;
-    //};
   }]);
 
