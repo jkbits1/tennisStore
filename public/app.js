@@ -11,6 +11,7 @@ var myApp = angular.module('myApp', [
   'myApp.viewChooseProgramme',
   'myApp.viewLogin',
   'myApp.viewManageFolders',
+  'myApp.viewSignup',
   'myApp.version',
   'ngCookies'
 ]);
@@ -98,6 +99,9 @@ myApp
         //return $http.get('/api/logout');
         //return $http.get('http://localhost:3030/logout');
         return $http.get('/logout');
+      },
+      signup: function (credentials) {
+        return $http.post('/signupClient', credentials);
       }
     };
   }]);

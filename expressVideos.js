@@ -376,10 +376,42 @@
   });
 
   app.post('/signup', passport.authenticate('local-signup', {
-    successRedirect: '/profile',
+    //successRedirect: '/profile',
+    successRedirect: '/app',
     failureRedirect: '/signup',
     failureFlash: true
   }));
+
+  //app.post('/signupClient', passport.authenticate('local-signup'), function (req, res){
+  //  res.send("123");
+  //});
+  app.post('/signupClient', function (req, res, next){
+    passport.authenticate('local-signup', function (err, user, info, test) {
+
+      if (err) {
+        console.error("failed signup");
+
+        return next(err);
+      }
+
+      if (!user) {
+        console.error("user exists already");
+
+        return res.send(401, "Bad signup info");
+      }
+
+      req.logIn(user, function (err) {
+        if (err) {
+          console.error("failed login after signup", err);
+
+          return next(err);
+        }
+
+        return res.send(user._doc.local.email);
+      });
+    })(req, res, next);
+  } );
+
   app.post('/login', passport.authenticate('local-login', {
     successRedirect: '/profile',
     failureRedirect: '/login',
@@ -406,6 +438,7 @@
         req.logIn(user, function (err) {
           if (err) {
             console.error("failed login 2", err);
+
             return next(err);
           }
 
