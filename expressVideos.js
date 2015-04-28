@@ -476,7 +476,11 @@
   app.get('/foldersDb', getFoldersFromDb);
 
   //app.get('/:progId', getEpisodesInfo);
-  app.get('/:progId([0-9]+)', getEpisodesInfo);
+  //app.get('/:progId([0-9]+)', getEpisodesInfo);
+
+  //app.get('/episodesInfo/:progId([0-9]+)', getEpisodesInfo);
+  // make param optional
+  app.get('/episodesInfo/:progId([0-9]+)?', getEpisodesInfo);
 
 
   //NOTE: this route needs to be placed before
