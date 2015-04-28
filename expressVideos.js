@@ -109,6 +109,8 @@
   // as a default, currently get the first line from the file and use that.
   //NOTE: revised to default to db access
   function getDefaultEpisodesInfo (req, res) {
+    // var for upcoming changes
+    var episodePaths = [];
     var lineCount = 0;
     var progInfoFound = false;
 
@@ -165,9 +167,11 @@
     var progName = "";
     var progSummary = "";
 
+    console.log("getProgrammeDetails:", progId);
+
     progDetails.find({id: progId}, function (err, docs) {
       if (err) {
-        console.error("getProgrammeDetails", err);
+        console.error("getProgrammeDetails - find error:", err);
         //res.redirect('/');
         res.send({info: "details not found"});
       }
@@ -183,14 +187,20 @@
     var progId = +(req.params.progId);
     var progInfoFound = false;
 
+    console.log("getEpisodesInfo: ", progId);
+
     function processPathInfo (pathInfo) {
       lineCount++;
       if (pathInfo._doc.id === progId){
         progInfoFound = true;
         getFolderList(pathInfo._doc.path, function (err, list) {
           if (err) {
-            console.log("no episodes found", err);
-            res.redirect('/');
+            console.log("getEpisodesInfo: no files found", err);
+
+            //res.redirect('/');
+            res.send({
+              //files: []
+            });
 
             return;
           }
@@ -203,18 +213,29 @@
 
     progDetails.find({}, function (err, docs) {
       if (err) {
-        console.error("getEpisodesInfo", err);
-        return res.redirect('/');
+        console.error("getEpisodesInfo: db error -", err);
+
+        //return res.redirect('/');
+        res.send({
+          //files: []
+        });
       }
       docs.forEach(processPathInfo);
       // no valid info found, redirect
       if (progInfoFound === false) {
-        res.redirect('/');
+        console.error("getEpisodesInfo: no episodes found");
+
+        //res.redirect('/');
+        res.send({
+          //files: []
+        });
       }
     });
   }
 
   function redirectToAppHome (req, res) {
+    console.log("redirect to app home");
+
     res.redirect('/app');
   }
 
@@ -454,6 +475,10 @@
   app.get('/folders', getFoldersFromFile);
   app.get('/foldersDb', getFoldersFromDb);
 
+  //app.get('/:progId', getEpisodesInfo);
+  app.get('/:progId([0-9]+)', getEpisodesInfo);
+
+
   //NOTE: this route needs to be placed before
   //      /:progId route. Reasons not fully
   //      understood yet.
@@ -462,8 +487,18 @@
   //NOTE: think this is always handled by app.use('/'...
   //app.get('/app/', redirectToAppHome);
 
-  app.get('/:progId', getEpisodesInfo);
-  app.get('/progDetails/:progId', getProgrammeDetails);
+  //app.get('/progDetails/:progId', getProgrammeDetails);
+  //app.get('/progDetails/:progId([0-9]+)', getProgrammeDetails);
+  //app.get('/progDetails/:progId(([0-9]+)?)', getProgrammeDetails);
+
+  // fails
+  //app.get('/progDetails/:progId([0-9]*)', getProgrammeDetails);
+
+  // works for any optional param value
+  //app.get('/progDetails/:progId?', getProgrammeDetails);
+  // works for optional numeric param values
+  app.get('/progDetails/:progId([0-9]+)?', getProgrammeDetails);
+
 
   //NOTE: temporary handling of keep-alive request
   app.get('/favicon.ico', function (req, res) {
