@@ -257,6 +257,18 @@
     res.redirect('/');
   }
 
+  function forceSSL (req, res, next){
+    if (req.headers['x-forwarded-proto'] !== 'https') {
+      return res.redirect(['https://', req.get('Host'), req.url].join(''));
+    }
+
+    return next();
+  }
+
+  if (process.env.NODE_ENV === 'production') {
+    app.use(forceSSL);
+  }
+
   //app.use(express.favicon());
   app.use(favicon(__dirname + '/images/favicon.ico'));
 
