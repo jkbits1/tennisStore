@@ -36,7 +36,7 @@ angular.module('myApp.viewBroadcasts', ['ngRoute'])
 
 viewBroadcastsModule.controller('ViewBroadcastsCtrl', ['$rootScope', '$scope', '$http', '$cookies', 'filenameService', function($rootScope, $scope, $http, $cookies, filenameService) {
 
-  var progIdUriSegment = "/";
+  var progIdUriSegment = "/episodesInfo/";
   var progDetailsUriSegment = "/progDetails/";
 
   if ($rootScope.progId !== undefined) {
@@ -51,7 +51,8 @@ viewBroadcastsModule.controller('ViewBroadcastsCtrl', ['$rootScope', '$scope', '
   $http.get(progDetailsUriSegment)
     .success(function (data, status, headers, config) {
       console.log(data);
-      if (data[0] !== undefined || data.length !== 0)   {
+      //if (data[0] !== undefined || data.length !== 0)   {
+      if (data[0] !== undefined)   {
         $scope.summary = data[0].summary;
       }
     })
