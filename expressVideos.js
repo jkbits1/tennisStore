@@ -502,23 +502,19 @@
   //NOTE: think this is always handled by app.use('/'...
   //app.get('/app/', redirectToAppHome);
 
-  //app.get('/progDetails/:progId', getProgrammeDetails);
-  //app.get('/progDetails/:progId([0-9]+)', getProgrammeDetails);
-  //app.get('/progDetails/:progId(([0-9]+)?)', getProgrammeDetails);
-
   // fails
   //app.get('/progDetails/:progId([0-9]*)', getProgrammeDetails);
 
-  // works for any optional param value
+  // optional param value
   //app.get('/progDetails/:progId?', getProgrammeDetails);
-  // works for optional numeric param values
+  // optional numeric param values only
   app.get('/progDetails/:progId([0-9]+)?', getProgrammeDetails);
 
 
   //NOTE: temporary handling of keep-alive request
-  app.get('/favicon.ico', function (req, res) {
-    res.send({});
-  });
+  //app.get('/favicon.ico', function (req, res) {
+  //  res.send({});
+  //});
 
   var server = app.listen(seedDb.appPort, function() {
     console.error("started server");
