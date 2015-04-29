@@ -59,7 +59,8 @@
     createTestFolders: createTestFolders,
     mainDbName: mainDbName,
     testDbName: testDbName,
-    appPort: appPort
+    appPort: appPort,
+    defaultEpisodeId: 1
   };
 
   function setUpDb (dbName) {

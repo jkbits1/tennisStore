@@ -161,8 +161,19 @@
     });
   }
 
+  function ensureProgIdIsValidOrDefault (progId){
+
+    if (isNaN(progId) || progId === undefined) {
+      console.log("invalid progId, using default value");
+
+      progId = seedDb.defaultEpisodeId;
+    }
+
+    return progId;
+  }
+
   function getProgrammeDetails (req, res){
-    var progId = +(req.params.progId);
+    var progId = ensureProgIdIsValidOrDefault(+(req.params.progId));
 
     var progName = "";
     var progSummary = "";
@@ -183,8 +194,8 @@
   }
 
   function getEpisodesInfo (req, res) {
+    var progId = ensureProgIdIsValidOrDefault(+(req.params.progId));
     var lineCount = 0;
-    var progId = +(req.params.progId);
     var progInfoFound = false;
 
     console.log("getEpisodesInfo: ", progId);
