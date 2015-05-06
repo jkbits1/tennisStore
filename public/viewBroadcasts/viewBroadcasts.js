@@ -34,19 +34,25 @@ angular.module('myApp.viewBroadcasts', ['ngRoute'])
 //  }
 //});
 
-viewBroadcastsModule.controller('ViewBroadcastsCtrl', ['$rootScope', '$scope', '$http', '$cookies', 'filenameService', function($rootScope, $scope, $http, $cookies, filenameService) {
+viewBroadcastsModule.controller('ViewBroadcastsCtrl', ['$rootScope', '$scope', '$http', '$cookies', '$routeParams', 'filenameService', function($rootScope, $scope, $http, $cookies, $routeParams, filenameService) {
 
   var progIdUriSegment = "/episodesInfo/";
   var progDetailsUriSegment = "/progDetails/";
 
-  if ($rootScope.progId !== undefined) {
-    progIdUriSegment += $rootScope.progId;
-    progDetailsUriSegment += $rootScope.progId;
+  var progId = "";
+
+  if ($routeParams.progId !== undefined) {
+    progId = $routeParams.progId;
+  }
+  else if ($rootScope.progId !== undefined) {
+    progId = $rootScope.progId;
   }
   else if ($cookies.selectedProgramme !== undefined) {
-    progIdUriSegment += $cookies.selectedProgramme;
-    progDetailsUriSegment += $cookies.selectedProgramme;
+    progId = $cookies.selectedProgramme;
   }
+
+  progIdUriSegment      += progId;
+  progDetailsUriSegment += progId;
 
   $http.get(progDetailsUriSegment)
     .success(function (data, status, headers, config) {
