@@ -353,7 +353,9 @@ button, a, button:focus, a:focus{
   font-size: 12px;
 }
 .navbar-toggle, .navbar-toggle:hover, .navbar-toggle:focus{
-  padding: 0;
+  /*JK change*/
+  /*padding: 0;*/
+  padding: 0px 10px;
   border: 0;
   background-color: transparent !important;
   background-image: none !important;
