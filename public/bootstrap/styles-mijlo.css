@@ -409,7 +409,9 @@ button, a, button:focus, a:focus{
 /* alternate header */
 .navbar-default{
   background: #fff;
-	background: rgba(255, 255, 255, 0.7);
+  /*JK change*/
+	/*background: rgba(255, 255, 255, 0.7);*/
+	background: rgba(255, 255, 255, 0.9);
   border: 0;
   color: #9b928d;
 }
