@@ -12,4 +12,5 @@ runTestModule.js
 seedDbOld.js
 config/database.js
 spec/support/
-public
+public/bootstrap
+public/components
