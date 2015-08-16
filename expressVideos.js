@@ -5,6 +5,7 @@
 //  using IIFE to clarify functions declared are not used
 //  elsewhere. This may well be an unnecessary addition.
 (function(){
+  var bunyan = require('bunyan');
   var express = require('express');
   var favicon = require('serve-favicon');
   var fs = require('fs');
@@ -35,6 +36,14 @@
   var app = express();
   // connect to db
   var progDetails = seedDb.setUpDb(seedDb.mainDbName);
+
+  var log = bunyan.createLogger({
+    name: 'expressVideos',
+    serializers: {
+      req: bunyan.stdSerializers.req,
+      res: bunyan.stdSerializers.res
+    }
+  });
 
   seedDb.createTestFolders();
 
@@ -272,8 +281,10 @@
   //app.use(express.favicon());
   app.use(favicon(__dirname + '/images/favicon.ico'));
 
-  //app.use(morgan('dev'));
-  app.use(morgan('combined'));
+
+
+  app.use(morgan('dev'));
+  //app.use(morgan('combined'));
   app.use(cookieParser());
 
   // change to use specific, non-deprecated, options
@@ -529,6 +540,6 @@
   //});
 
   var server = app.listen(seedDb.appPort, function() {
-    console.error("started server");
+    console.error("started server on port:", seedDb.appPort);
   });
 })();
