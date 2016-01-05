@@ -78,55 +78,12 @@ viewBroadcastsModule.controller('ViewBroadcastsCtrl', ['$rootScope', '$scope', '
           $scope.files = [];
         }
 
-        //var t1a = filenameService.getFileName("1");
-        var getFileName = filenameService.getFileName;
-        //var getFileName = filenameService;
-        var t1a = getFileName("1");
-
-        var monthYears = [];
-
-        $scope.fileDates = $scope.files.map(function (file) {
-
-          var dateWithoutWeekday = $scope.getDateAsString(file.date);
-          var dateWithoutWeekdayLetters = dateWithoutWeekday.split('');
-
-          var month = dateWithoutWeekdayLetters.splice(4, 3).join('');
-          // remove space
-          //dateWithoutWeekdayLetters.splice(0, 1);
-          var day = dateWithoutWeekdayLetters.splice(5, 2).join('');
-          var year = dateWithoutWeekdayLetters.splice(6, 4).join('');
-
-          var monthInfo = "";
-
-          if (monthYears[year + month] === undefined) {
-            monthYears[year + month] = 1;
-
-            //monthInfo = year + "&nbsp;&nbsp;&nbsp;&nbsp;" + month;
-            monthInfo = year + "  " + month;
-          }
-          else {
-
-            monthYears[year + month] += 1;
-            //monthInfo = "&nbsp;";
-            monthInfo = "";
-            month = "";
-            year = "";
-          }
-
-          return {
-            monthYear: monthInfo,
-            year: year,
-            month: month,
-            day: day
-          }
-        });
+        $scope.fileDates = filenameService.getFileDates($scope.files);
 
         //var parser = new fileParser($scope.files[0].fileName);
 
         //$scope.fileName = $scope.getProgramName();
         //$scope.fileDate = $scope.files[0].date;
-
-
       }).error(function(data, status, headers, config) {
 
       });

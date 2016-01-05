@@ -13,6 +13,7 @@ view2Module.factory('filenameService', function () {
     setUpScope: function($scope) {
 
       $scope.getDateAsString = this.getDateAsString;
+      $scope.getDateObject = this.getDateObject;
       $scope.getProgramName = this.getProgramName($scope);
 
       $scope.getProgrammeSummary = this.getProgrammeSummary($scope);
@@ -24,12 +25,58 @@ view2Module.factory('filenameService', function () {
 
       $scope.getEpisodeCount = this.getEpisodeCount($scope);
     },
-    getFileName: function (x) {
-      return "123";
-    },
+    //getFileName: function (x) {
+    //  return "123";
+    //},
     getDateAsString: function (date) {
       var fileDate = new Date(date);
       return fileDate.toDateString();
+    },
+    getFileDates: function getFileDates(files) {
+      var self = this;
+      var monthYears = {};
+
+      var formattedDates = files.map(function (file) {
+        var dateObject = self.getDateObject(file.date, monthYears);
+
+        return dateObject;
+      });
+
+      return formattedDates;
+    },
+    getDateObject: function (date, monthYears) {
+      var dateWithoutWeekday = this.getDateAsString(date);
+      var dateWithoutWeekdayLetters = dateWithoutWeekday.split('');
+
+      var month = dateWithoutWeekdayLetters.splice(4, 3).join('');
+      // remove space
+      //dateWithoutWeekdayLetters.splice(0, 1);
+      var day = dateWithoutWeekdayLetters.splice(5, 2).join('');
+      var year = dateWithoutWeekdayLetters.splice(6, 4).join('');
+
+      var monthInfo = "";
+
+      if (monthYears[year + month] === undefined) {
+        monthYears[year + month] = 1;
+
+        //monthInfo = year + "&nbsp;&nbsp;&nbsp;&nbsp;" + month;
+        monthInfo = year + "  " + month;
+      }
+      else {
+
+        monthYears[year + month] += 1;
+        //monthInfo = "&nbsp;";
+        monthInfo = "";
+        month = "";
+        year = "";
+      }
+
+      return {
+        monthYear: monthInfo,
+        year: year,
+        month: month,
+        day: day
+      }
     },
     getProgramName: function ($scope) {
 
