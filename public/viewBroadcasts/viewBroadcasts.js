@@ -38,6 +38,7 @@ viewBroadcastsModule.controller('ViewBroadcastsCtrl', ['$rootScope', '$scope', '
 
   var progIdUriSegment = "/episodesInfo/";
   var progDetailsUriSegment = "/progDetails/";
+  var episodeDetailsUriSegment = "/episodeDetails/";
 
   var progId = "";
 
@@ -51,8 +52,9 @@ viewBroadcastsModule.controller('ViewBroadcastsCtrl', ['$rootScope', '$scope', '
     progId = $cookies.selectedProgramme;
   }
 
-  progIdUriSegment      += progId;
-  progDetailsUriSegment += progId;
+  progIdUriSegment          += progId;
+  progDetailsUriSegment     += progId;
+  episodeDetailsUriSegment  += progId;
 
   $http.get(progDetailsUriSegment)
     .success(function (data, status, headers, config) {
@@ -87,6 +89,27 @@ viewBroadcastsModule.controller('ViewBroadcastsCtrl', ['$rootScope', '$scope', '
       }).error(function(data, status, headers, config) {
 
       });
+
+  $http.get(episodeDetailsUriSegment)
+    .success(function (data, status, headers, config) {
+      if (data !== undefined) {
+        $scope.episodeDetailsDb = data;
+      }
+      else {
+        $scope.episodeDetailsDb = [];
+      }
+
+      $scope.episodeDetails = $scope.episodeDetailsDb.map(function (val) {
+        var viewableDate = new Date(val.date).toDateString();
+
+        return {
+          date: viewableDate
+        }
+      });
+    })
+    .error(function (data, status, headers, config) {
+
+    });
 
     filenameService.setUpScope($scope);
   }]);

@@ -77,4 +77,11 @@
     </table>
   </div>
 
+  <div ng-show="episodeDetails.length">
+    <strong>Viewed Dates</strong>
+    <ul>
+      <li ng-repeat="episodeDetail in episodeDetails" >{{episodeDetail.date}}</li>
+    </ul>
+  </div>
+
 </div>
