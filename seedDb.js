@@ -60,7 +60,8 @@
     mainDbName: mainDbName,
     testDbName: testDbName,
     appPort: appPort,
-    defaultEpisodeId: 1
+    defaultEpisodeId: 1,
+    dbEpisodeDetails: getDbEpisodeDetails
   };
 
   function setUpDb (dbName) {
@@ -79,6 +80,20 @@
     return createModel();
   }
 
+  function getDbEpisodeDetails (dbName) {
+
+    function createModel() {
+      var modelName = 'episodeDetail';
+      var schema = new mongoose.Schema({
+        progId: 'number', date: 'string', time: 'string'
+      });
+
+      return mongoose.model(modelName, schema, "episodeDetails");
+    }
+
+    //db = mongoose.connect(dbName);
+    return createModel();
+  }
   function createDbSeedsFromFile (ProgModel, closeDbAfterSeeding, cbCompleted) {
     var final_line_read = false;
     var seedsCreated = 0;

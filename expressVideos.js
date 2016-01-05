@@ -36,6 +36,7 @@
   var app = express();
   // connect to db
   var progDetails = seedDb.setUpDb(seedDb.mainDbName);
+  var getDbEpisodeDetails = seedDb.dbEpisodeDetails(seedDb.mainDbName);
 
   var log = bunyan.createLogger({
     name: 'expressVideos',
@@ -251,6 +252,25 @@
         });
       }
     });
+  }
+
+  function getEpisodeDetails (req, res) {
+    var episodeId = +(req.params.episodeId);
+
+    getDbEpisodeDetails.find(
+      {progId: episodeId}
+      //{}
+      , function (err, docs) {
+      if (err) {
+        console.error("getEpisodeDetails - find error:", err);
+        //res.redirect('/');
+        res.send({info: "details not found"});
+      }
+
+      res.send(docs);
+    });
+
+
   }
 
   function redirectToAppHome (req, res) {
@@ -515,6 +535,8 @@
   //app.get('/episodesInfo/:progId([0-9]+)', getEpisodesInfo);
   // make param optional
   app.get('/episodesInfo/:progId([0-9]+)?', getEpisodesInfo);
+
+  app.get('/episodeDetails/:episodeId([0-9]+)?', getEpisodeDetails);
 
 
   //NOTE: this route needs to be placed before
