@@ -14,3 +14,5 @@ config/database.js
 spec/support/
 public/bootstrap
 public/components
+public/bower_components
+public/fonts
