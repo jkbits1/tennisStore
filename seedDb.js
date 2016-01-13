@@ -15,6 +15,8 @@
   var appPort = 3030;
 
   var db = undefined;
+  var dbProgDetails = undefined;
+  var dbEpisodeDetails = undefined;
 
   if (process.env.NODE_ENV !== undefined) {
     console.error("NODE_ENV exists");
@@ -61,7 +63,7 @@
     testDbName: testDbName,
     appPort: appPort,
     defaultEpisodeId: 1,
-    dbEpisodeDetails: getDbEpisodeDetails
+    getDbEpisodeDetails: getDbEpisodeDetails,
   };
 
   function setUpDb (dbName) {
@@ -76,8 +78,15 @@
       return mongoose.model(modelName, schema);
     }
 
-    db = mongoose.connect(dbName);
-    return createModel();
+    if (dbProgDetails === undefined) {
+      if (db === undefined) {
+        db = mongoose.connect(dbName);
+      }
+
+      dbProgDetails = createModel();
+    }
+
+    return dbProgDetails;
   }
 
   function getDbEpisodeDetails (dbName) {
@@ -91,8 +100,15 @@
       return mongoose.model(modelName, schema, "episodeDetails");
     }
 
-    //db = mongoose.connect(dbName);
-    return createModel();
+    if (dbEpisodeDetails === undefined) {
+      if (db === undefined) {
+        db = mongoose.connect(dbName);
+      }
+
+      dbEpisodeDetails = createModel();
+    }
+
+    return dbEpisodeDetails;
   }
   function createDbSeedsFromFile (ProgModel, closeDbAfterSeeding, cbCompleted) {
     var final_line_read = false;

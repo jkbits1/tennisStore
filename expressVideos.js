@@ -37,7 +37,7 @@
   var app = express();
   // connect to db
   var progDetails = seedDb.setUpDb(seedDb.mainDbName);
-  var getDbEpisodeDetails = seedDb.dbEpisodeDetails(seedDb.mainDbName);
+  var getDbEpisodeDetails = seedDb.getDbEpisodeDetails(seedDb.mainDbName);
 
   var log = bunyan.createLogger({
     name: 'expressVideos',
@@ -67,84 +67,6 @@
   //function getMongoData (res, callback) {
   //  progDetails.find({}, callback);
   //}
-
-  function getFoldersFromDb (req, res) {
-
-    console.error("folders db requested");
-
-    progDetails.find({}, function(err, docs){
-
-      console.error('folders db - db responded');
-
-      if (err) {
-        console.error("getFoldersFromDb", err);
-        return res.send(401, "folders not found");
-      }
-
-      console.error("folders db - sending");
-
-      res.send(docs);
-      //res.send({
-      //
-      //  paths: docs
-      //});
-    });
-  }
-
-  // as a default, currently get the first line from the file and use that.
-  //NOTE: revised to default to db access
-  function getDefaultEpisodesInfo (req, res) {
-    // var for upcoming changes
-    var episodePaths = [];
-    var lineCount = 0;
-    var progInfoFound = false;
-
-    console.error('getDefaultEpisodesInfo - starting');
-
-    //function processLine(line) {
-    function processPathInfo(pathInfo) {
-      //var path = pathInfo.getPathInfo(line);
-      console.error('getDefaultEpisodesInfo - handling path info');
-
-      lineCount++;
-      if (lineCount === 1) {
-        progInfoFound = true;
-        getFolderList(pathInfo._doc.path, function (err, list) {
-          if (err) {
-            console.error("getDefaultEpisodesInfo", err);
-            res.redirect('/');
-          }
-
-          res.send({
-            files: list
-          });
-        });
-      }
-    }
-
-    //pathInfo.queryInfoFile(processLine);
-    progDetails.find({}, function (err, docs) {
-
-      console.error('getDefaultEpisodesInfo - db responded');
-
-      //NOTE: possibly may create endless loop here
-      if (err) {
-        console.error('getDefaultEpisodesInfo - error');
-        return res.redirect('/');
-      }
-
-      docs.forEach(processPathInfo);
-
-      // no valid info found, redirect
-      if (progInfoFound === false) {
-        console.error('getDefaultEpisodesInfo - no data, sending empty object');
-
-        //NOTE: possibly may create endless loop here
-        //res.redirect('/');
-        res.send({});
-      }
-    });
-  }
 
   function ensureProgIdIsValidOrDefault (progId){
 
@@ -502,7 +424,7 @@
 
 
   app.get('/folders', routeFns.getFoldersFromFile);
-  app.get('/foldersDb', getFoldersFromDb);
+  app.get('/foldersDb', routeFns.getFoldersFromDb);
 
   //app.get('/:progId', getEpisodesInfo);
   //app.get('/:progId([0-9]+)', getEpisodesInfo);
