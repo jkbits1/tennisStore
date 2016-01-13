@@ -36,8 +36,8 @@
 
   var app = express();
   // connect to db
-  var progDetails = seedDb.setUpDb(seedDb.mainDbName);
-  var getDbEpisodeDetails = seedDb.getDbEpisodeDetails(seedDb.mainDbName);
+  var dbProgDetails = seedDb.setUpDb(seedDb.mainDbName);
+  var dbEpisodeDetails = seedDb.getDbEpisodeDetails(seedDb.mainDbName);
 
   var log = bunyan.createLogger({
     name: 'expressVideos',
@@ -65,7 +65,7 @@
   }));
 
   //function getMongoData (res, callback) {
-  //  progDetails.find({}, callback);
+  //  dbProgDetails.find({}, callback);
   //}
 
   function ensureProgIdIsValidOrDefault (progId){
@@ -87,7 +87,7 @@
 
     console.log("getProgrammeDetails:", progId);
 
-    progDetails.find({id: progId}, function (err, docs) {
+    dbProgDetails.find({id: progId}, function (err, docs) {
       if (err) {
         console.error("getProgrammeDetails - find error:", err);
         //res.redirect('/');
@@ -129,7 +129,7 @@
       }
     }
 
-    progDetails.find({}, function (err, docs) {
+    dbProgDetails.find({}, function (err, docs) {
       if (err) {
         console.error("getEpisodesInfo: db error -", err);
 
@@ -154,7 +154,7 @@
   function getEpisodeDetails (req, res) {
     var episodeId = +(req.params.episodeId);
 
-    getDbEpisodeDetails.find(
+    dbEpisodeDetails.find(
       {progId: episodeId}
       //{}
       , function (err, docs) {
@@ -283,7 +283,7 @@
   });
   app.get('/manageFolders', isLoggedIn, function (req, res) {
 
-    progDetails.find({}, function (err, docs) {
+    dbProgDetails.find({}, function (err, docs) {
       if (err) {
         console.error("manageFolders", err);
         res.redirect('/');
@@ -338,8 +338,29 @@
     console.error("path:", path);
     console.error("summary:", summary);
 
-    //progDetails.insert({id: id, name: name, path: path}, function(err, result){
-    progDetails.create({id: id, name: name, path: path, summary: summary}, function(err, result){
+    //dbProgDetails.insert({id: id, name: name, path: path}, function(err, result){
+    dbProgDetails.create({id: id, name: name, path: path, summary: summary}, function(err, result){
+      if (err) {
+        console.error("couldn't add path");
+      }
+      res.redirect('/manageFolders');
+    });
+  });
+
+  app.post('/episodeDetails/add', isLoggedIn, function (req, res) {
+
+    var id = +(req.body.id);
+    var path = req.body.path;
+    var name = req.body.name;
+    var summary = req.body.summary;
+
+    console.error("id:", id);
+    console.error("name:", name);
+    console.error("path:", path);
+    console.error("summary:", summary);
+
+    //dbProgDetails.insert({id: id, name: name, path: path}, function(err, result){
+    dbProgDetails.create({id: id, name: name, path: path, summary: summary}, function(err, result){
       if (err) {
         console.error("couldn't add path");
       }
