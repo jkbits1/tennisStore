@@ -25,11 +25,12 @@
   var templateFn = require('jade').compileFile(templatePath);
 
   var getFolderList = require('./fileParse');
-  var pathInfo = require('./pathInfo');
   var seedDb = require('./seedDb');
 
   var folderCreator = require('./folderCreator');
   var folderCounter = require('./folderCounter');
+
+  var routeFns = require('./routeFunctions');
 
   console.error("dir:", __dirname);
 
@@ -62,32 +63,6 @@
       return done(null, user);
     });
   }));
-
-  function getFoldersFromFile (req, res) {
-    var pathList = [];
-
-    function processLine (line) {
-      var path = undefined;
-
-      if (line === null || line === undefined || line.length === 0) {
-        return;
-      }
-      path = pathInfo.getPathInfo(line);
-      pathList.push(path);
-    }
-
-    function end() {
-      //if (err) {
-      //
-      //  res.send(err);
-      //}
-      res.send({
-        paths: pathList
-      });
-    }
-
-    pathInfo.queryInfoFile(processLine, end);
-  }
 
   //function getMongoData (res, callback) {
   //  progDetails.find({}, callback);
@@ -526,7 +501,7 @@
   });
 
 
-  app.get('/folders', getFoldersFromFile);
+  app.get('/folders', routeFns.getFoldersFromFile);
   app.get('/foldersDb', getFoldersFromDb);
 
   //app.get('/:progId', getEpisodesInfo);
