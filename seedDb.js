@@ -15,8 +15,11 @@
   var appPort = 3030;
 
   var db = undefined;
-  var dbProgDetails = undefined;
-  var dbEpisodeDetails = undefined;
+
+  var dbCollections = {
+    dbProgDetails: undefined,
+    dbEpisodeDetails: undefined
+  };
 
   if (process.env.NODE_ENV !== undefined) {
     console.error("NODE_ENV exists");
@@ -57,59 +60,54 @@
 
   module.exports = {
     setUpDb: setUpDb,
+    getDbEpisodeDetails: getDbEpisodeDetails,
     createDbSeedsFromFile: createDbSeedsFromFile,
     createTestFolders: createTestFolders,
     mainDbName: mainDbName,
     testDbName: testDbName,
     appPort: appPort,
-    defaultEpisodeId: 1,
-    getDbEpisodeDetails: getDbEpisodeDetails,
+    defaultEpisodeId: 1
   };
 
-  function setUpDb (dbName) {
-
-    function createModel() {
-      var modelName = 'prog';
-      var schema = new mongoose.Schema({
-        //progId:
-        id: 'number', path: 'string', name: 'string', summary: 'string'
-      });
-
-      return mongoose.model(modelName, schema);
-    }
-
-    if (dbProgDetails === undefined) {
+  function initialiseCollection (dbName, name, createFn) {
+    if (dbCollections[name] === undefined) {
       if (db === undefined) {
         db = mongoose.connect(dbName);
       }
 
-      dbProgDetails = createModel();
+      dbCollections[name] = createFn();
     }
 
-    return dbProgDetails;
+    return dbCollections[name];
+  }
+
+  function createModelProg() {
+    var modelName = 'prog';
+    var schema = new mongoose.Schema({
+      //progId:
+      id: 'number', path: 'string', name: 'string', summary: 'string'
+    });
+
+    return mongoose.model(modelName, schema);
+  }
+
+  function createModelEpisodeDetail() {
+    var modelName = 'episodeDetail';
+    var schema = new mongoose.Schema({
+      progId: 'number', date: 'string', time: 'string'
+    });
+
+    return mongoose.model(modelName, schema, "episodeDetails");
+  }
+
+  function setUpDb (dbName) {
+    return initialiseCollection(dbName, "dbProgDetails", createModelProg);
   }
 
   function getDbEpisodeDetails (dbName) {
-
-    function createModel() {
-      var modelName = 'episodeDetail';
-      var schema = new mongoose.Schema({
-        progId: 'number', date: 'string', time: 'string'
-      });
-
-      return mongoose.model(modelName, schema, "episodeDetails");
-    }
-
-    if (dbEpisodeDetails === undefined) {
-      if (db === undefined) {
-        db = mongoose.connect(dbName);
-      }
-
-      dbEpisodeDetails = createModel();
-    }
-
-    return dbEpisodeDetails;
+    return initialiseCollection(dbName, "dbEpisodeDetails", createModelEpisodeDetail);
   }
+
   function createDbSeedsFromFile (ProgModel, closeDbAfterSeeding, cbCompleted) {
     var final_line_read = false;
     var seedsCreated = 0;
