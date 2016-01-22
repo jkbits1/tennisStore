@@ -349,22 +349,24 @@
 
   app.post('/episodeDetails/add', isLoggedIn, function (req, res) {
 
-    var id = +(req.body.id);
-    var path = req.body.path;
-    var name = req.body.name;
-    var summary = req.body.summary;
+    var progId = +(req.body.progId);
+    var date = req.body.date;
+    var time = req.body.time;
+    var viewed = req.body.viewed;
 
-    console.error("id:", id);
-    console.error("name:", name);
-    console.error("path:", path);
-    console.error("summary:", summary);
+    console.error("progId:", progId);
+    console.error("date:", date);
+    console.error("time:", time);
+    console.error("viewed:", viewed);
+
+    //date, progId, time, viewed
 
     //dbProgDetails.insert({id: id, name: name, path: path}, function(err, result){
-    dbProgDetails.create({id: id, name: name, path: path, summary: summary}, function(err, result){
+    dbEpisodeDetails.create({progId: progId, date: date, time: time, viewed: viewed}, function(err, result){
       if (err) {
-        console.error("couldn't add path");
+        console.error("couldn't add episodeDetails");
       }
-      res.redirect('/manageFolders');
+      res.redirect('/episodeDetails');
     });
   });
 
