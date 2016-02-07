@@ -6,6 +6,9 @@ var pathInfo = require('./pathInfo');
 var seedDb = require('./seedDb');
 var getFolderList = require('./fileParse');
 
+var templatePath = require.resolve('./views/manageFolders.jade');
+var templateFn = require('jade').compileFile(templatePath);
+
 var progDetails = seedDb.setUpDb(seedDb.mainDbName);
 var episodeDetails = seedDb.getDbEpisodeDetails(seedDb.mainDbName);
 
@@ -15,7 +18,9 @@ module.exports = {
   getFoldersFromDb: getFoldersFromDb,
   getProgrammeDetails: getProgrammeDetails,
   getEpisodesInfo: getEpisodesInfo,
-  getEpisodeDetails: getEpisodeDetails
+  getEpisodeDetails: getEpisodeDetails,
+  addPath: addPath,
+  manageFolders: manageFolders
 };
 
 // NOT IN USE
@@ -196,5 +201,38 @@ function getEpisodeDetails (req, res) {
       });
 
 
+}
+
+function addPath (req, res) {
+  var id = +(req.body.id);
+  var path = req.body.path;
+  var name = req.body.name;
+  var summary = req.body.summary;
+
+  console.error("id:", id);
+  console.error("name:", name);
+  console.error("path:", path);
+  console.error("summary:", summary);
+
+  progDetails.create({id: id, name: name, path: path, summary: summary}, function(err, result){
+    if (err) {
+      console.error("couldn't add path");
+    }
+    res.redirect('/manageFolders');
+  });
+}
+
+function manageFolders (req, res) {
+  progDetails.find({}, function (err, docs) {
+    if (err) {
+      console.error("manageFolders", err);
+      res.redirect('/');
+    }
+
+    res.write(templateFn({ user: req.user,
+      folders: docs
+    }));
+    res.end();
+  });
 }
 

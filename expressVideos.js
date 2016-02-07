@@ -20,10 +20,6 @@
   var bodyParser = require('body-parser');
   var session = require('express-session');
 
-  //var templatePath = require.resolve('./template.jade');
-  var templatePath = require.resolve('./views/manageFolders.jade');
-  var templateFn = require('jade').compileFile(templatePath);
-
   var getFolderList = require('./fileParse');
   var seedDb = require('./seedDb');
 
@@ -146,19 +142,7 @@
     res.send({loggedIn: true});
   });
 
-  app.get('/manageFolders', isLoggedIn, function (req, res) {
-    dbProgDetails.find({}, function (err, docs) {
-      if (err) {
-        console.error("manageFolders", err);
-        res.redirect('/');
-      }
-
-      res.write(templateFn({ user: req.user,
-        folders: docs
-      }));
-      res.end();
-    });
-  });
+  app.get('/manageFolders', isLoggedIn, routeFns.manageFolders);
 
   app.get('/createTestFolder/:folderName/:listName', isLoggedIn, function (req, res) {
     folderCreator(req.params.folderName,
@@ -188,25 +172,7 @@
     })
   });
 
-  app.post('/addPath', isLoggedIn, function (req, res) {
-    var id = +(req.body.id);
-    var path = req.body.path;
-    var name = req.body.name;
-    var summary = req.body.summary;
-
-    console.error("id:", id);
-    console.error("name:", name);
-    console.error("path:", path);
-    console.error("summary:", summary);
-
-    dbProgDetails.create({id: id, name: name, path: path, summary: summary}, function(err, result){
-      if (err) {
-        console.error("couldn't add path");
-      }
-      res.redirect('/manageFolders');
-    });
-  });
-
+  app.post('/addPath', isLoggedIn, routeFns.addPath);
   app.post('/episodeDetails/add', isLoggedIn, function (req, res) {
 
     var progId = +(req.body.progId);
