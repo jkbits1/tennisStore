@@ -35,7 +35,6 @@
   console.error("dir:", __dirname);
 
   var app = express();
-  // connect to db
   var dbProgDetails = seedDb.setUpDb(seedDb.mainDbName);
   var dbEpisodeDetails = seedDb.getDbEpisodeDetails(seedDb.mainDbName);
 
@@ -64,12 +63,7 @@
     });
   }));
 
-  //function getMongoData (res, callback) {
-  //  dbProgDetails.find({}, callback);
-  //}
-
   function ensureProgIdIsValidOrDefault (progId){
-
     if (isNaN(progId) || progId === undefined) {
       console.log("invalid progId, using default value");
 
@@ -81,7 +75,6 @@
 
   function getProgrammeDetails (req, res){
     var progId = ensureProgIdIsValidOrDefault(+(req.params.progId));
-
     var progName = "";
     var progSummary = "";
 
@@ -90,14 +83,11 @@
     dbProgDetails.find({id: progId}, function (err, docs) {
       if (err) {
         console.error("getProgrammeDetails - find error:", err);
-        //res.redirect('/');
         res.send({info: "details not found"});
       }
 
       res.send(docs);
     });
-
-    //res.send({programmeName: progName, programmeSummary: progSummary});
   }
 
   function getEpisodesInfo (req, res) {
@@ -115,16 +105,9 @@
           if (err) {
             console.log("getEpisodesInfo: no files found", err);
 
-            //res.redirect('/');
-            res.send({
-              //files: []
-            });
-
-            return;
+            return res.send({});
           }
-          res.send({
-            files: list
-          });
+          res.send({ files: list });
         });
       }
     }
@@ -133,20 +116,15 @@
       if (err) {
         console.error("getEpisodesInfo: db error -", err);
 
-        //return res.redirect('/');
-        res.send({
-          //files: []
-        });
+        res.send({});
       }
       docs.forEach(processPathInfo);
+
       // no valid info found, redirect
       if (progInfoFound === false) {
         console.error("getEpisodesInfo: no episodes found");
 
-        //res.redirect('/');
-        res.send({
-          //files: []
-        });
+        return res.send({});
       }
     });
   }
@@ -156,12 +134,10 @@
 
     dbEpisodeDetails.find(
       {progId: episodeId}
-      //{}
       , function (err, docs) {
       if (err) {
         console.error("getEpisodeDetails - find error:", err);
-        //res.redirect('/');
-        res.send({info: "details not found"});
+        return res.send({info: "details not found"});
       }
 
       res.send(docs);
@@ -195,24 +171,16 @@
     app.use(forceSSL);
   }
 
-  //app.use(express.favicon());
   app.use(favicon(__dirname + '/images/favicon.ico'));
 
-
-
-  app.use(morgan('dev'));
-  //app.use(morgan('combined'));
+  app.use(morgan('dev'));   //app.use(morgan('combined'));
   app.use(cookieParser());
 
-  // change to use specific, non-deprecated, options
-  //app.use(bodyParser());
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
 
   app.set('view engine', 'ejs');
-
-  // NOTE: may decide to use multiple
-  //       view engines sometime.
+  // NOTE: may decide to use multiple view engines sometime.
   //app.set('view engine', jade);
 
   //NOTE: added resave option to resolve deprecated warning.
@@ -228,26 +196,6 @@
   app.use(passport.session());
   app.use(flash());
 
-  // works for these urls, when view1 folder directly beneath root
-  //http://localhost:3030/view1/view1.html
-  //http://localhost:3030/chooseProgramme
-  //app.use('/view1', express.static(__dirname + '/view1'));
-
-  // works for these urls, when viewX folder beneath public
-  //http://localhost:3030/view1/view1.html
-  //http://localhost:3030/chooseProgramme
-  //app.use('/view1', express.static(__dirname + '/public/view1'));
-  //app.use('/view2', express.static(__dirname + '/public/view2'));
-
-  //app.use('/view1', express.static('/public/view1'));
-
-  // works for :
-  //http://localhost:3030/public/app.css
-  //http://localhost:3030/public/view1/view1.html
-  //app.use('/public', express.static(__dirname + '/public'));
-
-  //app.use('/', express.static(__dirname + '/public'));
-
   // enables urls in this format :
   //  http://localhost:3030/app/#/chooseProgramme
   app.use('/app', express.static(__dirname + '/public'));
@@ -257,9 +205,7 @@
     res.header("Access-Control-Allow-Headers", "Origin, x-Requested-With, Content-Type, Accept");
     next();
   });
-  //app.get('/', getDefaultEpisodesInfo);
   app.get('/', redirectToAppHome);
-
   app.get('/account', function (req, res) {
     res.render('account.ejs');
   });
@@ -278,28 +224,27 @@
       user: req.user
     });
   });
+
   app.get('/isLoggedIn', isLoggedIn, function (req, res) {
     res.send({loggedIn: true});
   });
-  app.get('/manageFolders', isLoggedIn, function (req, res) {
 
+  app.get('/manageFolders', isLoggedIn, function (req, res) {
     dbProgDetails.find({}, function (err, docs) {
       if (err) {
         console.error("manageFolders", err);
         res.redirect('/');
       }
 
-      //res.send(docs);
       res.write(templateFn({ user: req.user,
-        //folders: [{name: 'one', value: 1}, {name: 'two', value: 2}]
         folders: docs
       }));
       res.end();
     });
   });
+
   app.get('/createTestFolder/:folderName/:listName', isLoggedIn, function (req, res) {
     folderCreator(req.params.folderName,
-      //"listFileName.txt"
       req.params.listName
       , function (err){
       if (err) {
@@ -327,7 +272,6 @@
   });
 
   app.post('/addPath', isLoggedIn, function (req, res) {
-
     var id = +(req.body.id);
     var path = req.body.path;
     var name = req.body.name;
@@ -338,7 +282,6 @@
     console.error("path:", path);
     console.error("summary:", summary);
 
-    //dbProgDetails.insert({id: id, name: name, path: path}, function(err, result){
     dbProgDetails.create({id: id, name: name, path: path, summary: summary}, function(err, result){
       if (err) {
         console.error("couldn't add path");
@@ -359,9 +302,6 @@
     console.error("time:", time);
     console.error("viewed:", viewed);
 
-    //date, progId, time, viewed
-
-    //dbProgDetails.insert({id: id, name: name, path: path}, function(err, result){
     dbEpisodeDetails.create({progId: progId, date: date, time: time, viewed: viewed}, function(err, result){
       if (err) {
         console.error("couldn't add episodeDetails");
@@ -371,15 +311,11 @@
   });
 
   app.post('/signup', passport.authenticate('local-signup', {
-    //successRedirect: '/profile',
     successRedirect: '/app',
     failureRedirect: '/signup',
     failureFlash: true
   }));
 
-  //app.post('/signupClient', passport.authenticate('local-signup'), function (req, res){
-  //  res.send("123");
-  //});
   app.post('/signupClient', function (req, res, next){
     passport.authenticate('local-signup', function (err, user, info, test) {
 
@@ -410,11 +346,9 @@
   app.post('/login', passport.authenticate('local-login', {
     successRedirect: '/profile',
     failureRedirect: '/login',
-    //failureRedirect: '/signup',
     failureFlash: true
   }));
 
-  //app.post('/loginClient', passport.authenticate('local-login', function (req, res){
   // code from passport custom callback - using for debugging purposes
   app.post('/loginClient', function (req, res, next) {
       passport.authenticate('local-login', function (err, user, info) {
@@ -437,49 +371,20 @@
             return next(err);
           }
 
-          //return res.redirect('/manageFolders');
-          //return res.send({ loggedIn: 'test123' });
-          //return res.send(user);
           return res.send(user._doc.local.email);
         });
       })(req, res, next);
   });
 
-
   app.get('/folders', routeFns.getFoldersFromFile);
   app.get('/foldersDb', routeFns.getFoldersFromDb);
 
-  //app.get('/:progId', getEpisodesInfo);
-  //app.get('/:progId([0-9]+)', getEpisodesInfo);
-
-  //app.get('/episodesInfo/:progId([0-9]+)', getEpisodesInfo);
-  // make param optional
+  // param is optional
   app.get('/episodesInfo/:progId([0-9]+)?', getEpisodesInfo);
-
   app.get('/episodeDetails/:episodeId([0-9]+)?', getEpisodeDetails);
 
-
-  //NOTE: this route needs to be placed before
-  //      /:progId route. Reasons not fully
-  //      understood yet.
-  //app.get('/chooseProgramme/', function (req, res) {
-
-  //NOTE: think this is always handled by app.use('/'...
-  //app.get('/app/', redirectToAppHome);
-
-  // fails
-  //app.get('/progDetails/:progId([0-9]*)', getProgrammeDetails);
-
-  // optional param value
-  //app.get('/progDetails/:progId?', getProgrammeDetails);
   // optional numeric param values only
   app.get('/progDetails/:progId([0-9]+)?', getProgrammeDetails);
-
-
-  //NOTE: temporary handling of keep-alive request
-  //app.get('/favicon.ico', function (req, res) {
-  //  res.send({});
-  //});
 
   var server = app.listen(seedDb.appPort, function() {
     console.error("started server on port:", seedDb.appPort);
