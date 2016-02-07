@@ -4,13 +4,18 @@
 
 var pathInfo = require('./pathInfo');
 var seedDb = require('./seedDb');
+var getFolderList = require('./fileParse');
 
 var progDetails = seedDb.setUpDb(seedDb.mainDbName);
+var episodeDetails = seedDb.getDbEpisodeDetails(seedDb.mainDbName);
 
 module.exports = {
   getFoldersFromFile: getFoldersFromFile,
   //getDefaultEpisodesInfo: getDefaultEpisodesInfo
-  getFoldersFromDb: getFoldersFromDb
+  getFoldersFromDb: getFoldersFromDb,
+  getProgrammeDetails: getProgrammeDetails,
+  getEpisodesInfo: getEpisodesInfo,
+  getEpisodeDetails: getEpisodeDetails
 };
 
 // NOT IN USE
@@ -108,5 +113,88 @@ function getFoldersFromDb (req, res) {
 
     res.send(docs);
   });
+}
+
+function ensureProgIdIsValidOrDefault (progId){
+  if (isNaN(progId) || progId === undefined) {
+    console.log("invalid progId, using default value");
+
+    progId = seedDb.defaultEpisodeId;
+  }
+
+  return progId;
+}
+
+function getProgrammeDetails (req, res){
+  var progId = ensureProgIdIsValidOrDefault(+(req.params.progId));
+  var progName = "";
+  var progSummary = "";
+
+  console.log("getProgrammeDetails:", progId);
+
+  progDetails.find({id: progId}, function (err, docs) {
+    if (err) {
+      console.error("getProgrammeDetails - find error:", err);
+      res.send({info: "details not found"});
+    }
+
+    res.send(docs);
+  });
+}
+
+function getEpisodesInfo (req, res) {
+  var progId = ensureProgIdIsValidOrDefault(+(req.params.progId));
+  var lineCount = 0;
+  var progInfoFound = false;
+
+  console.log("getEpisodesInfo: ", progId);
+
+  function processPathInfo (pathInfo) {
+    lineCount++;
+    if (pathInfo._doc.id === progId){
+      progInfoFound = true;
+      getFolderList(pathInfo._doc.path, function (err, list) {
+        if (err) {
+          console.log("getEpisodesInfo: no files found", err);
+
+          return res.send({});
+        }
+        res.send({ files: list });
+      });
+    }
+  }
+
+  progDetails.find({}, function (err, docs) {
+    if (err) {
+      console.error("getEpisodesInfo: db error -", err);
+
+      res.send({});
+    }
+    docs.forEach(processPathInfo);
+
+    // no valid info found, redirect
+    if (progInfoFound === false) {
+      console.error("getEpisodesInfo: no episodes found");
+
+      return res.send({});
+    }
+  });
+}
+
+function getEpisodeDetails (req, res) {
+  var episodeId = +(req.params.episodeId);
+
+  episodeDetails.find(
+      {progId: episodeId}
+      , function (err, docs) {
+        if (err) {
+          console.error("getEpisodeDetails - find error:", err);
+          return res.send({info: "details not found"});
+        }
+
+        res.send(docs);
+      });
+
+
 }
 

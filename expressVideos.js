@@ -63,89 +63,6 @@
     });
   }));
 
-  function ensureProgIdIsValidOrDefault (progId){
-    if (isNaN(progId) || progId === undefined) {
-      console.log("invalid progId, using default value");
-
-      progId = seedDb.defaultEpisodeId;
-    }
-
-    return progId;
-  }
-
-  function getProgrammeDetails (req, res){
-    var progId = ensureProgIdIsValidOrDefault(+(req.params.progId));
-    var progName = "";
-    var progSummary = "";
-
-    console.log("getProgrammeDetails:", progId);
-
-    dbProgDetails.find({id: progId}, function (err, docs) {
-      if (err) {
-        console.error("getProgrammeDetails - find error:", err);
-        res.send({info: "details not found"});
-      }
-
-      res.send(docs);
-    });
-  }
-
-  function getEpisodesInfo (req, res) {
-    var progId = ensureProgIdIsValidOrDefault(+(req.params.progId));
-    var lineCount = 0;
-    var progInfoFound = false;
-
-    console.log("getEpisodesInfo: ", progId);
-
-    function processPathInfo (pathInfo) {
-      lineCount++;
-      if (pathInfo._doc.id === progId){
-        progInfoFound = true;
-        getFolderList(pathInfo._doc.path, function (err, list) {
-          if (err) {
-            console.log("getEpisodesInfo: no files found", err);
-
-            return res.send({});
-          }
-          res.send({ files: list });
-        });
-      }
-    }
-
-    dbProgDetails.find({}, function (err, docs) {
-      if (err) {
-        console.error("getEpisodesInfo: db error -", err);
-
-        res.send({});
-      }
-      docs.forEach(processPathInfo);
-
-      // no valid info found, redirect
-      if (progInfoFound === false) {
-        console.error("getEpisodesInfo: no episodes found");
-
-        return res.send({});
-      }
-    });
-  }
-
-  function getEpisodeDetails (req, res) {
-    var episodeId = +(req.params.episodeId);
-
-    dbEpisodeDetails.find(
-      {progId: episodeId}
-      , function (err, docs) {
-      if (err) {
-        console.error("getEpisodeDetails - find error:", err);
-        return res.send({info: "details not found"});
-      }
-
-      res.send(docs);
-    });
-
-
-  }
-
   function redirectToAppHome (req, res) {
     console.log("redirect to app home");
 
@@ -380,11 +297,11 @@
   app.get('/foldersDb', routeFns.getFoldersFromDb);
 
   // param is optional
-  app.get('/episodesInfo/:progId([0-9]+)?', getEpisodesInfo);
-  app.get('/episodeDetails/:episodeId([0-9]+)?', getEpisodeDetails);
+  app.get('/episodesInfo/:progId([0-9]+)?', routeFns.getEpisodesInfo);
+  app.get('/episodeDetails/:episodeId([0-9]+)?', routeFns.getEpisodeDetails);
 
   // optional numeric param values only
-  app.get('/progDetails/:progId([0-9]+)?', getProgrammeDetails);
+  app.get('/progDetails/:progId([0-9]+)?', routeFns.getProgrammeDetails);
 
   var server = app.listen(seedDb.appPort, function() {
     console.error("started server on port:", seedDb.appPort);
