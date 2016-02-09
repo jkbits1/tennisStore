@@ -36,6 +36,7 @@ angular.module('myApp.viewBroadcasts', ['ngRoute'])
 
 viewBroadcastsModule.controller('ViewBroadcastsCtrl', ['$rootScope', '$scope', '$http', '$cookies', '$routeParams', 'filenameService', function($rootScope, $scope, $http, $cookies, $routeParams, filenameService) {
 
+
   var progIdUriSegment = "/episodesInfo/";
   var progDetailsUriSegment = "/progDetails/";
   var episodeDetailsUriSegment = "/episodeDetails/";
@@ -52,9 +53,21 @@ viewBroadcastsModule.controller('ViewBroadcastsCtrl', ['$rootScope', '$scope', '
     progId = $cookies.selectedProgramme;
   }
 
+  // used for date form submission, may refactor out or merge with non-scope var later
+  $scope.progId = progId;
+
   progIdUriSegment          += progId;
   progDetailsUriSegment     += progId;
   episodeDetailsUriSegment  += progId;
+
+  $scope.changeDateX = function () {
+    var d = $scope.selectedDate;
+  };
+
+  $scope.getSelectedDate = function () {
+
+    return $scope.getSelectedDate();
+  };
 
   $http.get(progDetailsUriSegment)
     .success(function (data, status, headers, config) {
@@ -66,29 +79,37 @@ viewBroadcastsModule.controller('ViewBroadcastsCtrl', ['$rootScope', '$scope', '
     })
     .error(function (data, status, headers, config){
 
-    });
-
+  });
 
   //$http.get('http://localhost:3030' + progIdUriSegment)
   $http.get('' + progIdUriSegment)
-      .success(function (data, status, headers, config) {
+    .success(function (data, status, headers, config) {
 
-        if (data.files !== undefined) {
-          $scope.files = data.files;
-        }
-        else {
-          $scope.files = [];
-        }
+      if (data.files !== undefined) {
+        $scope.files = data.files;
 
-        $scope.fileDates = filenameService.getFileDates($scope.files);
+        $scope.dates = $scope.files.map(function (file, idx) {
+          return {
+            date: file.date,
+            time: file.time,
+            dateDisplay: new Date(file.date),
+            id: idx
+          }
+        });
+      }
+      else {
+        $scope.files = [];
+      }
 
-        //var parser = new fileParser($scope.files[0].fileName);
+      $scope.fileDates = filenameService.getFileDates($scope.files);
 
-        //$scope.fileName = $scope.getProgramName();
-        //$scope.fileDate = $scope.files[0].date;
-      }).error(function(data, status, headers, config) {
+      //var parser = new fileParser($scope.files[0].fileName);
 
-      });
+      //$scope.fileName = $scope.getProgramName();
+      //$scope.fileDate = $scope.files[0].date;
+    }).error(function(data, status, headers, config) {
+
+  });
 
   $http.get(episodeDetailsUriSegment)
     .success(function (data, status, headers, config) {
@@ -110,6 +131,25 @@ viewBroadcastsModule.controller('ViewBroadcastsCtrl', ['$rootScope', '$scope', '
     .error(function (data, status, headers, config) {
 
     });
+
+    $scope.addEpisodeDetails = function (episodeDetails) {
+      var pickedDate = $scope.selectedDate;
+
+      // [progId, date time viewed
+
+      var addedEpisodeDetails = {
+        progId: $scope.progId,
+        date: $scope.selectedDate.date,
+        time: $scope.selectedDate.time,
+        viewed: true
+      };
+
+      $http.post('/episodeDetails/add', addedEpisodeDetails)
+        .success(function (data, status, headers, config) {
+        })
+        .error(function (data, status, headers, config) {
+        });
+    };
 
     filenameService.setUpScope($scope);
   }]);

@@ -77,11 +77,35 @@
     </table>
   </div>
 
-  <div ng-show="episodeDetails.length">
+  <div class="row" ng-show="episodeDetails.length">
     <strong>Viewed Dates</strong>
     <ul>
       <li ng-repeat="episodeDetail in episodeDetails" >{{episodeDetail.date}}</li>
     </ul>
+  </div>
+
+  <div class="row">
+    {{selectedDate}}
+    <form role="form" id="addEpisodeDetails" ng-submit="addEpisodeDetails(newDetails)">
+      <fieldset>
+        <legend>Episode Details</legend>
+        <div class="form-group">
+          <label for="episodeDates">Dates</label>
+          <select class="input-lg" id="episodeDates" ng-model="selectedDate"
+                  ng-options="date as date.dateDisplay for date in dates track by date.id"
+                  ng-change="changeDateX()">
+
+          </select>
+          <!--ng-options="file as file.date for file in files"-->
+        </div>
+        <div class="form-group">
+          <label for="episodeTime">Time</label>
+          <input type="text" id="episodeTime" class="form-control" name="time" ng-model="newDetails.time">
+        </div>
+
+        <input type="submit" class="btn btn-default" value="Add Details">
+      </fieldset>
+    </form>
   </div>
 
 </div>
