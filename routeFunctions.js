@@ -156,25 +156,35 @@ function getEpisodesInfo (req, res) {
 
   function processPathInfo (pathInfo) {
     lineCount++;
-    if (pathInfo._doc.id === progId){
+
+    if (lineCount > 1) {
+      return;
+    }
+
+    if (pathInfo._doc.id === progId) {
       progInfoFound = true;
+
       getFolderList(pathInfo._doc.path, function (err, list) {
+        
         if (err) {
           console.log("getEpisodesInfo: no files found", err);
 
           return res.send({});
         }
-        res.send({ files: list });
+
+        return res.send({ files: list });
       });
     }
   }
 
   progDetails.find({}, function (err, docs) {
+    
     if (err) {
       console.error("getEpisodesInfo: db error -", err);
 
-      res.send({});
+      return res.send({});
     }
+
     docs.forEach(processPathInfo);
 
     // no valid info found, redirect

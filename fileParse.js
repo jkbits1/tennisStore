@@ -29,7 +29,7 @@ function getFolderSortedList (folder, callback){
     });
 
     videoList = files.map(function (file) {
-      var regexFileName = /[a-zA-Z\s]*/;
+      var regexFileName = /[a-zA-Z'-\s]*/;
       var regexDate     = /_[0-9]*_/; // date plus underscores
       var regexTime     = /[0-9]*[.]/; // time
       var fileName      = undefined;

@@ -12,7 +12,8 @@
 
   var mainDbName = undefined;
   var testDbName = undefined;
-  var appPort = 3030;
+  // var appPort = 3030;
+  var appPort = 8000;
 
   var db = undefined;
 
@@ -54,8 +55,8 @@
   else {
     console.error("no NODE_ENV found");
 
-    mainDbName = "mongodb://localhost/proginfo";
-    testDbName = "mongodb://localhost/proginfoTest";
+    mainDbName = "mongodb://172.17.0.2/proginfo";
+    testDbName = "mongodb://172.17.0.2/proginfoTest";
   }
 
   module.exports = {
